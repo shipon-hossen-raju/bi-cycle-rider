@@ -5,3 +5,7 @@
 body {
   @apply font-poppinsSans;
 }
+
+p {
+  @apply text-lg font-normal;
+}
