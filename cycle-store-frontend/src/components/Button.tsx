@@ -1,12 +1,12 @@
 import React from "react";
 
 type ButtonProps = {
-  children: React.ReactNode; // Text or elements inside the button
-  onClick?: () => void; // Optional click handler
-  type?: "button" | "submit" | "reset"; // Button type
-  variant?: "primary" | "secondary" | "outline"; // Button styles
-  disabled?: boolean; // Disabled state
-  className?: string; // Additional custom classes
+  children: React.ReactNode;
+  onClick?: () => void;
+  type?: "button" | "submit" | "reset";
+  variant?: "primary" | "secondary" | "outline";
+  disabled?: boolean;
+  className?: string;
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -17,7 +17,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   className = "",
 }) => {
-  const baseStyle = `py-4 px-6 transition-all rounded`;
+  const baseStyle = `py-4 px-6 transition-all rounded-lg`;
 
   const variants = {
     primary: `bg-brand text-white hover:bg-brand/50`,
@@ -30,7 +30,7 @@ const Button: React.FC<ButtonProps> = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={` ${baseStyle} ${variants[variant]} ${
+      className={`${baseStyle} ${variants[variant]} ${
         disabled ? "opacity-50 cursor-not-allowed" : ""
       } ${className}`}
     >

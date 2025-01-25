@@ -1,6 +1,6 @@
 import About from "../pages/About/About";
 import Contact from "../pages/Contact/Contact";
-import Home from "../pages/Home/Home";
+import Home from "../pages/Home";
 import Shop from "../pages/Shop/Shop";
 import { TNavItems } from "../types";
 
