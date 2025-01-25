@@ -1,15 +1,19 @@
+import Accessories from "./Accessories";
 import Banner from "./Banner";
 import BestSell from "./BestSell";
 import Categories from "./Categories";
-import Features from "./Features";
+import Facilities from "./Facilities";
+import FeaturedProducts from "./FeaturedProducts";
 
 export default function Home() {
   return (
     <>
       <Banner />
-      <Features />
+      <Facilities />
       <BestSell />
       <Categories />
+      <FeaturedProducts />
+      <Accessories />
     </>
   );
 }

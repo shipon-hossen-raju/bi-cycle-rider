@@ -6,14 +6,14 @@ import {
 } from "../../assets/icons/globalIcon";
 import MainContainer from "../../components/MainContainer";
 
-type TFeaturesData = {
+type TFacilitiesData = {
   id: string;
   title: string;
   description: string;
   icon: JSX.Element;
 };
 
-const featuresData: TFeaturesData[] = [
+const facilitiesData: TFacilitiesData[] = [
   {
     id: "f-1",
     title: "GPS Tracking or anti-theft",
@@ -40,7 +40,7 @@ const featuresData: TFeaturesData[] = [
   },
 ];
 
-export default function Features() {
+export default function Facilities() {
   return (
     <section className="bg-bgColor py-12">
       <MainContainer>
@@ -52,7 +52,7 @@ export default function Features() {
 
           <div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {featuresData.map((feature) => (
+              {facilitiesData.map((feature) => (
                 <div
                   key={feature.id}
                   className="flex flex-col items-center bg-black px-9 py-10 rounded-lg"
