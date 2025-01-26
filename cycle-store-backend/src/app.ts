@@ -1,16 +1,17 @@
 import express, { Request, Response } from "express";
-import { orderRoute } from "./modules/oders/order.routes";
-import { productRoute } from "./modules/product/product.routes";
+import appRouter from "./routes";
 
 const app = express();
 
 app.use(express.json());
 
+app.use("/api/v1", appRouter);
+
 // product routes
-app.use("/api/products", productRoute);
+// app.use("/api/products", productRoute);
 
 // orders routes
-app.use("/api/orders", orderRoute);
+// app.use("/api/orders", orderRoute);
 
 // default route or root route
 app.get("/", (req: Request, res: Response) => {
