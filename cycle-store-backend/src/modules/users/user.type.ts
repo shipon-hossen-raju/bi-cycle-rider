@@ -16,3 +16,7 @@ export interface UserModel extends Model<TUser> {
     hashedPassword: string,
   ): Promise<boolean>;
 }
+
+export interface UserModel extends Model<TUser> {
+  isUserExistsByEmail(email: string): Promise<boolean>;
+}

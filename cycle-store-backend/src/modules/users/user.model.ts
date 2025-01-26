@@ -1,8 +1,8 @@
+import bcrypt from "bcrypt";
 import { model, Schema } from "mongoose";
+import config from "../../config";
 import { userRole, userStatus } from "./user.constant";
 import { TUser, UserModel } from "./user.type";
-import bcrypt from "bcrypt";
-import config from "../../config";
 
 const userSchema = new Schema<TUser, UserModel>(
   {
@@ -62,6 +62,10 @@ userSchema.statics.isPasswordMatched = async function (
   hashedPassword,
 ) {
   return await bcrypt.compare(plainTextPassword, hashedPassword);
+};
+
+userSchema.statics.isUserExistsByEmail = async function (email: string) {
+  return await User.findOne({ email }).select("+password");
 };
 
 export const User = model<TUser, UserModel>("user", userSchema);

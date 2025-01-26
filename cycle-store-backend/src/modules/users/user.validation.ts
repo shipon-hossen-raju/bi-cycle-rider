@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createStudentValidationSchema = z.object({
+export const createUserValidationSchema = z.object({
   body: z.object({
     name: z.string().max(30).min(1),
     email: z.string().email(),

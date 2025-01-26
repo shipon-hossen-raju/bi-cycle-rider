@@ -1,14 +1,14 @@
 import { Router } from "express";
-import { userController } from "./user.controller";
 import validateRequest from "../../utils/validationRequest";
-import { createStudentValidationSchema } from "./user.validation";
+import { userController } from "./user.controller";
+import { createUserValidationSchema } from "./user.validation";
 
 const router = Router();
 
 // user registration
 router.post(
   "/registration",
-  validateRequest(createStudentValidationSchema),
+  validateRequest(createUserValidationSchema),
   userController.createUser,
 );
 

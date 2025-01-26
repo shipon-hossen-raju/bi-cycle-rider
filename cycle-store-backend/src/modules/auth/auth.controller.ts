@@ -1,0 +1,17 @@
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
+import statusCode from "../../utils/status.code";
+import { authService } from "./auth.service";
+
+const loginUser = catchAsync(async (req, res) => {
+  const result = await authService.loginUser(req.body);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: statusCode.ok,
+    message: "login success",
+    data: result,
+  });
+});
+
+export const authController = { loginUser };
