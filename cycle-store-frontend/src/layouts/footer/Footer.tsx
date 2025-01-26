@@ -5,7 +5,7 @@ import logoImage from "../../assets/logo/Bike.png";
 
 export default function Footer() {
   return (
-    <div>
+    <>
       <footer className="bg-black py-12">
         <MainContainer>
           <div className=" mb-8">
@@ -25,8 +25,10 @@ export default function Footer() {
               <h2 className="text-white text-lg font-semibold mb-4">
                 Contact Us
               </h2>
-              <p className="text-gray-400">123 Street Name, City, England</p>
-              <p className="text-gray-400">+1 123 456 7890</p>
+              <p className="text-gray-400">Dhalarchar, Aminpur, Pabna</p>
+              <p className="text-gray-400">
+                <a href="tel:+8801310861071">+8801310861071</a>
+              </p>
               <p className="text-gray-400">
                 <a href="mailto:msshipon234@gmail.com">msshipon234@gmail.com</a>
               </p>
@@ -52,6 +54,6 @@ export default function Footer() {
           </div>
         </MainContainer>
       </footer>
-    </div>
+    </>
   );
 }
