@@ -90,6 +90,7 @@ export default function Accessories() {
     <section className="py-20">
       <MainContainer>
         <SectionTitle
+          parentStyle="text-black"
           subtitle="parts & accessories"
           title="Shop Gear & Accessories"
           description="Load up and head out. Explore the route less traveled  or accelerate your daily routine with one of these rugged, versatile e-bikes"
