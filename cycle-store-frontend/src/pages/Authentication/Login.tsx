@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import Input from "../../components/form/Input";
 import Button from "../../components/Button";
 import { Link } from "react-router";
-// import { useDispatch } from "react-redux";
-// import { AppDispatch } from "../store/store";
-// import { login } from "../features/auth/authSlice";
+import { useAppDispatch } from "../../redux/hooks";
+import { useLoginMutation } from "../../redux/features/auth/authApi";
+import { setUser } from "../../redux/features/auth/authSlice";
+import { verifyToken } from "../../utils/verifyToken";
 
 type TLogin = {
   email: string;
@@ -19,7 +20,8 @@ const Login: React.FC = () => {
     password: "",
   });
   const [errors, setErrors] = useState<FormErrors>({});
-  //   const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
+  const [login] = useLoginMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -45,13 +47,23 @@ const Login: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("e", e);
-    if (validate()) {
-      // dispatch(login(formData));
-      console.log("valid data ", formData);
+
+    if (!validate()) {
+      return;
     }
+
+    try {
+      const result = await login(formData).unwrap();
+      const data = result?.data;
+
+      console.log("result ", result);
+      // setUser(data);
+      const user = verifyToken(data.accessToken);
+
+      console.log("user ", user);
+    } catch (error) {}
   };
 
   return (

@@ -4,6 +4,7 @@ import statusCode from "../../utils/status.code";
 import { authService } from "./auth.service";
 
 const loginUser = catchAsync(async (req, res) => {
+  console.log("req.body ", req.body);
   const result = await authService.loginUser(req.body);
 
   sendResponse(res, {
