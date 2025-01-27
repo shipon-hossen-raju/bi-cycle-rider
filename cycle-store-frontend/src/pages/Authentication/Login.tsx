@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Input from "../../components/form/Input";
-import Button from "../../components/Button";
 import { Link, useNavigate } from "react-router";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { useLoginMutation } from "../../redux/features/auth/authApi";
-import {
-  logout,
-  setUser,
-  useCurrentUser,
-} from "../../redux/features/auth/authSlice";
-import { verifyToken } from "../../utils/verifyToken";
 import { toast } from "sonner";
+import Button from "../../components/Button";
+import Input from "../../components/form/Input";
+import { useLoginMutation } from "../../redux/features/auth/authApi";
+import { setUser, useCurrentUser } from "../../redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { verifyToken } from "../../utils/verifyToken";
 
 type TLogin = {
   email: string;
