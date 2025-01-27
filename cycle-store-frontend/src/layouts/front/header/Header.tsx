@@ -1,7 +1,7 @@
 import { Link } from "react-router";
-import logoImage from "../../assets/logo/Bike.png";
-import CustomImage from "../../components/Img";
-import MainContainer from "../../components/MainContainer";
+import CustomImage from "@/components/Img";
+import MainContainer from "@/components/MainContainer";
+import logoImage from "@/assets/logo/Bike.png";
 import AccountCart from "./AccountCart";
 import NavItems from "./NavItems";
 

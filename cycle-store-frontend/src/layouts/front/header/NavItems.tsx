@@ -1,6 +1,6 @@
 import { Link } from "react-router";
-import { navItems } from "../../constants/navItems";
-import { navItemsGenerators } from "../../generators/navItems.generators";
+import { navItems } from "../../../constants/navItems";
+import { navItemsGenerators } from "../../../generators/navItems.generators";
 
 export default function NavItems() {
   const navData = navItemsGenerators(navItems);

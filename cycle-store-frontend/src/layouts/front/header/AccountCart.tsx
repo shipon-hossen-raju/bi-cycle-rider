@@ -1,14 +1,14 @@
 import { Link } from "react-router";
-import { cartIcon, loveIcon, userIcon } from "../../assets/icons/globalIcon";
-import { useAppSelector } from "../../redux/hooks";
-import { useCurrentUser } from "../../redux/features/auth/authSlice";
+import { cartIcon, loveIcon, userIcon } from "../../../assets/icons/globalIcon";
+import { useCurrentUser } from "../../../redux/features/auth/authSlice";
+import { useAppSelector } from "../../../redux/hooks";
 
 export default function AccountCart() {
   const user = useAppSelector(useCurrentUser);
   const isUserRoute =
     user?.role === "user"
       ? "/account"
-      : user?.role === "user"
+      : user?.role === "admin"
       ? "/dashboard"
       : "/login";
 

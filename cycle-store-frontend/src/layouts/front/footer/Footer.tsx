@@ -1,7 +1,6 @@
-import CustomImage from "../../components/Img";
-import MainContainer from "../../components/MainContainer";
-
-import logoImage from "../../assets/logo/Bike.png";
+import CustomImage from "@/components/Img";
+import MainContainer from "@/components/MainContainer";
+import logoImage from "@/assets/logo/Bike.png";
 
 export default function Footer() {
   return (

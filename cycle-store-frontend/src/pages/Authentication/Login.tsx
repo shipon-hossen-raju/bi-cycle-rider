@@ -71,10 +71,10 @@ const Login: React.FC = () => {
 
       dispatch(setUser({ user, token: data.accessToken }));
 
-      console.log("user ", user);
       toast.success("Logged in", { id: toastId, duration: 2000 });
       navigate("/");
     } catch (error) {
+      console.log("error ", error);
       toast.error("Something went wrong", { id: toastId, duration: 2000 });
     }
   };
