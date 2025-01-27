@@ -1,9 +1,16 @@
 import { Link } from "react-router";
 import { cartIcon, loveIcon, userIcon } from "../../assets/icons/globalIcon";
+import { useAppSelector } from "../../redux/hooks";
+import { useCurrentUser } from "../../redux/features/auth/authSlice";
 
 export default function AccountCart() {
-  const user = null;
-  const isUserRoute = user ? "/account" : "/login";
+  const user = useAppSelector(useCurrentUser);
+  const isUserRoute =
+    user?.role === "user"
+      ? "/account"
+      : user?.role === "user"
+      ? "/dashboard"
+      : "/login";
 
   return (
     <div className="">
@@ -19,9 +26,11 @@ export default function AccountCart() {
         </figure>
 
         {/* account */}
-        <Link to={isUserRoute} className="text-gray-600 hover:text-gray-800">
-          {userIcon}
-        </Link>
+        <div>
+          <Link to={isUserRoute} className="text-gray-600 hover:text-gray-800">
+            {userIcon}
+          </Link>
+        </div>
       </div>
     </div>
   );

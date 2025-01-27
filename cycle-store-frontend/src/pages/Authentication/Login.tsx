@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Input from "../../components/form/Input";
 import Button from "../../components/Button";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAppDispatch } from "../../redux/hooks";
 import { useLoginMutation } from "../../redux/features/auth/authApi";
 import { setUser } from "../../redux/features/auth/authSlice";
 import { verifyToken } from "../../utils/verifyToken";
+import { toast } from "sonner";
 
 type TLogin = {
   email: string;
@@ -15,6 +16,7 @@ type TLogin = {
 type FormErrors = Partial<Record<keyof TLogin, string>>;
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<TLogin>({
     email: "",
     password: "",
@@ -49,6 +51,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const toastId = toast.loading("Logging in");
 
     if (!validate()) {
       return;
@@ -57,13 +60,16 @@ const Login: React.FC = () => {
     try {
       const result = await login(formData).unwrap();
       const data = result?.data;
-
-      console.log("result ", result);
-      // setUser(data);
       const user = verifyToken(data.accessToken);
 
+      dispatch(setUser({ user, token: data.accessToken }));
+
       console.log("user ", user);
-    } catch (error) {}
+      toast.success("Logged in", { id: toastId, duration: 2000 });
+      navigate("/");
+    } catch (error) {
+      toast.error("Something went wrong", { id: toastId, duration: 2000 });
+    }
   };
 
   return (
@@ -75,6 +81,7 @@ const Login: React.FC = () => {
           <Input
             name="email"
             type="email"
+            label="Email"
             errors={errors}
             handleChange={handleChange}
             value={formData.email}
@@ -82,6 +89,7 @@ const Login: React.FC = () => {
           <Input
             name="password"
             type="password"
+            label="Password"
             errors={errors}
             handleChange={handleChange}
             value={formData.password}

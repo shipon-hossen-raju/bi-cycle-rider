@@ -6,6 +6,8 @@ import AccountCart from "./AccountCart";
 import NavItems from "./NavItems";
 
 export default function Header() {
+  // const
+
   return (
     <header className="bg-primary text-white py-3">
       <MainContainer>

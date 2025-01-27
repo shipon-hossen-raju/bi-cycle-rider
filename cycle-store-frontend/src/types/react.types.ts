@@ -8,7 +8,7 @@ export interface MainContainerProps extends HTMLAttributes<HTMLDivElement> {
 
 export type TNavItems = {
   id?: string;
-  name: string;
+  name?: string;
   path: string;
   element: JSX.Element;
 };

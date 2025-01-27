@@ -5,6 +5,7 @@ interface InputProps {
   name: string;
   value: string;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  label?: string;
   errors: { [key: string]: string };
 }
 
@@ -13,13 +14,16 @@ export default function Input({
   name,
   value,
   handleChange,
+  label,
   errors,
 }: InputProps) {
   return (
     <div className="mb-4">
-      <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
-        Email
-      </label>
+      {label && (
+        <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+          {label}
+        </label>
+      )}
       <input
         id={name}
         name={name}
