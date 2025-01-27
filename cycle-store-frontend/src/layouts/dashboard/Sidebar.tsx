@@ -26,7 +26,7 @@ export const Sidebar = () => {
   console.log("navData", navData);
 
   return (
-    <div className="w-64 bg-white border-r shadow-md flex flex-col justify-between">
+    <div className="w-64 bg-brand/5 border-r shadow-md flex flex-col justify-between">
       <div>
         <div className="p-4 text-xl font-bold">Admin Dashboard</div>
 
@@ -35,7 +35,7 @@ export const Sidebar = () => {
             <Link
               to={item.path}
               key={item.id}
-              className="flex items-center gap-3 text-xl hover:bg-slate-200 px-2 py-1 rounded transition duration-300 "
+              className="flex items-center gap-3 text-xl hover:bg-brand/90 hover:text-white px-2 py-1 rounded transition duration-300 "
             >
               <figure>{item.icon}</figure>
               <span>{item.name}</span>

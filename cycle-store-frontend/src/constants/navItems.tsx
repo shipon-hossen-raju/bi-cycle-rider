@@ -1,5 +1,9 @@
 import Dashboard from "@/pages/dashboard/Dashboard";
-import { dashboardIcon, productsIcon } from "@/assets/icons/dashboard.icons";
+import {
+  dashboardIcon,
+  ordersIcon,
+  productsIcon,
+} from "@/assets/icons/dashboard.icons";
 import Products from "@/pages/dashboard/Products/Products";
 import Orders from "@/pages/dashboard/Orders/Orders";
 import { TAdminRoute, TNavItems } from "@/types";
@@ -60,7 +64,7 @@ export const adminNavItems: TAdminRoute[] = [
     id: "3-orders",
     name: "Orders",
     path: "/dashboard/orders",
-    icon: dashboardIcon,
+    icon: ordersIcon,
     element: <Orders />,
   },
 ];

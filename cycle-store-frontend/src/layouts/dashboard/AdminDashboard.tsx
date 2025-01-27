@@ -4,7 +4,7 @@ import { Sidebar } from "./Sidebar";
 
 export default function AdminDashboard() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-brand/5">
       {/* Header */}
       <Header />
 
@@ -14,8 +14,8 @@ export default function AdminDashboard() {
         <Sidebar />
 
         {/* Content */}
-        <main className="flex-1 p-4 space-y-4 bg-gray-50">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
+        <main className="flex-1 p-4 space-y-4 bg-gray-50 bg-brand/10">
+          {/* <h1 className="text-2xl font-bold">Dashboard</h1> */}
 
           <div>
             <Outlet />
