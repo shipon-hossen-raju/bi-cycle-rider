@@ -32,8 +32,8 @@ export default function Input({
         onChange={handleChange}
         className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-      {errors.email && (
-        <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+      {errors[name] && (
+        <p className="text-red-500 text-base mt-1">{errors[name]}</p>
       )}
     </div>
   );

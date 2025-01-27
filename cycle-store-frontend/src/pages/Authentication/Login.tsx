@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../../components/form/Input";
 import Button from "../../components/Button";
 import { Link, useNavigate } from "react-router";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useLoginMutation } from "../../redux/features/auth/authApi";
-import { setUser } from "../../redux/features/auth/authSlice";
+import {
+  logout,
+  setUser,
+  useCurrentUser,
+} from "../../redux/features/auth/authSlice";
 import { verifyToken } from "../../utils/verifyToken";
 import { toast } from "sonner";
 
@@ -24,6 +28,14 @@ const Login: React.FC = () => {
   const [errors, setErrors] = useState<FormErrors>({});
   const dispatch = useAppDispatch();
   const [login] = useLoginMutation();
+
+  const user = useAppSelector(useCurrentUser);
+
+  useEffect(() => {
+    if (user?.email) {
+      navigate("/");
+    }
+  }, [user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -51,11 +63,10 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const toastId = toast.loading("Logging in");
-
     if (!validate()) {
       return;
     }
+    const toastId = toast.loading("Logging in");
 
     try {
       const result = await login(formData).unwrap();

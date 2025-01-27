@@ -15,7 +15,7 @@ export default function Account() {
       dispatch(logout());
       navigate("/login");
     }
-  }, []);
+  }, [user]);
 
   const handleLogout = () => dispatch(logout());
 
