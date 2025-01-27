@@ -11,36 +11,89 @@ const orderCreateDB = async (orderData) => {
     return await order.save();
 };
 const productQuantityUpdate = async (clientData) => {
-    const productFind = await product_model_1.default.findById(clientData?.product);
-    if (!productFind) {
+    // Fetch product details
+    const product = await product_model_1.default.findById(clientData.product);
+    if (!product) {
         throw new Error("Product not found!");
     }
-    // price checking
-    const storeProductCalculate = productFind?.price * clientData.quantity;
-    if (clientData.totalPrice < storeProductCalculate) {
-        throw new Error(`Your price is low. Your price: ${clientData.totalPrice} but Our Product price: ${storeProductCalculate}`);
+    // If quantity becomes zero, update inStock status
+    if (product?.quantity === 0) {
+        await product_model_1.default.findByIdAndUpdate(clientData.product, { inStock: false }, { new: true });
+        throw new Error("Insufficient stock!");
     }
-    // product quantity checking
-    if (productFind?.quantity < clientData.quantity) {
-        throw new Error(`insufficient stock! `);
+    // Validate total price
+    const expectedTotalPrice = product.price * clientData.quantity;
+    if (clientData.totalPrice < expectedTotalPrice) {
+        throw new Error(`Insufficient total price. Your price: ${clientData.totalPrice}, Required price: ${expectedTotalPrice}`);
     }
-    let productQuantityUpdated;
-    if (productFind?.quantity >= 0) {
-        productQuantityUpdated = await product_model_1.default.findOneAndUpdate({ _id: clientData.product }, {
-            quantity: productFind?.quantity - clientData.quantity,
-        }, { new: true });
+    // Check product stock
+    if (product.quantity < clientData.quantity) {
+        throw new Error("Insufficient stock!");
     }
-    else {
-        productQuantityUpdated = await product_model_1.default.findOneAndUpdate({ _id: clientData.product }, {
-            inStock: false,
-        }, { new: true });
+    // Update product quantity
+    let updatedProduct = await product_model_1.default.findByIdAndUpdate(clientData.product, {
+        $inc: { quantity: -clientData.quantity },
+    }, { new: true });
+    // If quantity becomes zero, update inStock status
+    if (updatedProduct?.quantity === 0) {
+        updatedProduct = await product_model_1.default.findByIdAndUpdate(clientData.product, { inStock: false }, { new: true });
     }
     return {
-        message: "product updated!",
+        message: "Product updated successfully!",
         status: true,
-        data: productQuantityUpdated,
+        data: updatedProduct,
     };
 };
+// const productQuantityUpdate = async (clientData: TOrder) => {
+//   const productFind = await ProductModel.findById(clientData?.product);
+//   if (!productFind) {
+//     throw new Error("Product not found!");
+//   }
+//   // price checking
+//   const storeProductCalculate = productFind?.price * clientData.quantity;
+//   if (clientData.totalPrice < storeProductCalculate) {
+//     throw new Error(
+//       `Your price is low. Your price: ${clientData.totalPrice} but Our Product price: ${storeProductCalculate}`,
+//     );
+//   }
+//   // product quantity checking
+//   if (productFind?.quantity < clientData.quantity) {
+//     throw new Error(`insufficient stock! `);
+//   }
+//   let productQuantityUpdated;
+//   if (productFind?.quantity >= 0) {
+//     productQuantityUpdated = await ProductModel.findOneAndUpdate(
+//       { _id: clientData.product },
+//       {
+//         quantity: productFind?.quantity - clientData.quantity,
+//       },
+//       { new: true },
+//     );
+//     // if price zero  then inStock false
+//     if (productQuantityUpdated?.quantity === 0) {
+//       productQuantityUpdated = await ProductModel.findOneAndUpdate(
+//         { _id: clientData.product },
+//         {
+//           inStock: false,
+//         },
+//         { new: true },
+//       );
+//     }
+//   } else {
+//     productQuantityUpdated = await ProductModel.findOneAndUpdate(
+//       { _id: clientData.product },
+//       {
+//         inStock: false,
+//       },
+//       { new: true },
+//     );
+//   }
+//   return {
+//     message: "product updated!",
+//     status: true,
+//     data: productQuantityUpdated,
+//   };
+// };
 const revenueFindDB = async () => {
     const getTotalAmon = await order_model_1.default.aggregate([
         {
