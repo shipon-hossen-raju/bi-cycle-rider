@@ -1,12 +1,10 @@
-import { Home, User, Settings } from "lucide-react";
-// import { Button } from "@/components/ui/button";
+import Button from "@/components/Button";
 import { adminNavItems } from "@/constants/navItems";
 import { adminNavItemsGenerators } from "@/generators/navItems.generators";
-import { Link, useNavigate } from "react-router";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { logout, useCurrentUser } from "@/redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useEffect } from "react";
-import Button from "@/components/Button";
+import { Link, useNavigate } from "react-router";
 
 export const Sidebar = () => {
   const navData = adminNavItemsGenerators(adminNavItems);
@@ -35,10 +33,10 @@ export const Sidebar = () => {
             <Link
               to={item.path}
               key={item.id}
-              className="flex items-center gap-3 text-xl hover:bg-brand/90 hover:text-white px-2 py-1 rounded transition duration-300 "
+              className="relative flex items-center gap-3 text-base font-medium hover:bg-brand/90 hover:text-white px-2 py-1 rounded transition duration-300 "
             >
-              <figure>{item.icon}</figure>
-              <span>{item.name}</span>
+              <figure className="">{item.icon}</figure>
+              <span className="">{item.name}</span>
             </Link>
           ))}
         </nav>

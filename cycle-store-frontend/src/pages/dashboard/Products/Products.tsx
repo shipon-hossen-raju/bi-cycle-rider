@@ -17,18 +17,20 @@ export default function Products() {
           {isProduct ? "Products Lists" : "Add Product"}{" "}
         </h2>
         <div>
-          <Button
-            onClick={handleProduct}
-            className="!py-1.5 !px-1 text-semibold"
-            variant="outline"
-          >
-            Add Product
-          </Button>
+          {isProduct ? (
+            <Button
+              onClick={handleProduct}
+              className="!py-1.5 !px-1 text-semibold"
+              variant="outline"
+            >
+              Add Product
+            </Button>
+          ) : null}
         </div>
       </div>
 
       {/* product lists */}
-      <div className="bg-white/50 rounded p-5">
+      <div className="bg-white/50 rounded space-y-0 p-5 h-full max-h-[calc(100vh-140px)] overflow-y-scroll">
         {isProduct ? (
           <div className="flex items-center justify-center min-h-[300px]">
             <Button
@@ -40,7 +42,7 @@ export default function Products() {
             </Button>
           </div>
         ) : (
-          <AddProduct />
+          <AddProduct setIsProduct={setIsProduct} />
         )}
       </div>
     </div>

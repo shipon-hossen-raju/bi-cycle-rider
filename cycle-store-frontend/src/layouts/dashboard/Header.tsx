@@ -1,12 +1,11 @@
 import { bellIcon, userProfile } from "@/assets/icons/dashboard.icons";
-import { Button } from "@/components/ui/button";
-import { Bell, UserCircle } from "lucide-react";
 import { toast } from "sonner";
 
 export const Header = () => {
   const handleUser = () => {
     toast.success("Coming soon...", { duration: 2000 });
   };
+
   return (
     <header className="w-full bg-brand/5 border-b shadow-md p-4 flex items-center justify-between">
       <h1 className="text-xl font-bold">Admin Panel</h1>
