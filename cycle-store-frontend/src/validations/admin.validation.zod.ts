@@ -32,4 +32,13 @@ export const addProductFormSchema = z.object({
   tags: z.string().nonempty({
     message: "Tags are required.",
   }),
+  brandName: z.string().nonempty({
+    message: "Tags are required.",
+  }),
+  quantity: z
+    .number()
+    .min(0, {
+      message: "quantity must be a positive number.",
+    })
+    .positive("quantity must be positive"),
 });

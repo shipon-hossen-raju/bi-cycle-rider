@@ -1,29 +1,26 @@
 import { Request, Response } from "express";
+import catchAsync from "../../utils/catchAsync";
+import sendResponse from "../../utils/sendResponse";
+import statusCode from "../../utils/status.code";
 import { productService } from "./product.service";
-import { productZodSchema } from "./product.validation";
 
 // product create or store controller
-const productCreateDB = async (req: Request, res: Response) => {
-  try {
-    const clientData = req.body;
-    const zodParseData = productZodSchema.parse(clientData);
+const productCreateDB = catchAsync(async (req, res) => {
+  const clientData = req.body;
+  const newProduct = {
+    ...req.body,
+  };
 
-    const createdResult = await productService.createProductDB(zodParseData);
+  const createdResult = await productService.createProductDB(newProduct);
+  // const createdResult = clientData;
 
-    //   send data
-    res.status(200).json({
-      success: true,
-      message: "Bicycle created successfully",
-      data: createdResult,
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: "Validation failed",
-      error: error,
-    });
-  }
-};
+  sendResponse(res, {
+    statusCode: statusCode.ok,
+    success: true,
+    message: "Bicycle created successfully",
+    data: createdResult || {},
+  });
+});
 
 // get all products
 const getAllProducts = async (req: Request, res: Response) => {

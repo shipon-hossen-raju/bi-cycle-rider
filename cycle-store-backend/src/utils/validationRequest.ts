@@ -4,7 +4,7 @@ import { NextFunction } from "express";
 
 const validateRequest = (schema: AnyZodObject) => {
   return catchAsync(async (req, res, next: NextFunction) => {
-    console.log("req.body ", req.body);
+    // console.log("req.body ", req.body);
     await schema.parseAsync({
       body: req.body,
       cookies: req.cookies,

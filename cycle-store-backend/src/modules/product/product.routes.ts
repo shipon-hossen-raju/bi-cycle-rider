@@ -1,9 +1,15 @@
 import express from "express";
 import { productController } from "./product.controller";
+import validateRequest from "../../utils/validationRequest";
+import { productZodSchema } from "./product.validation";
 const route = express.Router();
 
 // product create or store route
-route.post("/", productController.productCreateDB);
+route.post(
+  "/",
+  validateRequest(productZodSchema),
+  productController.productCreateDB,
+);
 
 // get all data
 route.get("/", productController.getAllProducts);

@@ -20,11 +20,13 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { bicycleTypeData } from "@/constants/admin";
+import { useAddProductMutation } from "@/redux/features/admin/productApi.admin";
 import { uploadImage } from "@/utils/uploadsImage";
 import { addProductFormSchema } from "@/validations/admin.validation.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 type TAddProductProps = {
   setIsProduct: (value: boolean) => void;
@@ -35,12 +37,15 @@ export default function AddProduct({ setIsProduct }: TAddProductProps) {
     cycleType?: string;
     thumbnail?: string;
     extraImage?: string;
+    productStatus?: string;
   }>({});
   const [selectedBicycle, setSelectedBicycle] = useState<string | null>(null);
+  const [productStatus, setProductStatus] = useState<string | null>(null);
   const [selectedSubtype, setSelectedSubtype] = useState<string | null>(null);
-  const [thumbnail, setThumbnail] = useState<File | undefined>(undefined);
-  const [extraImage, setExtraImage] = useState<File[] | undefined>(undefined);
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [extraImage, setExtraImage] = useState<File[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [addProduct] = useAddProductMutation(undefined);
 
   const form = useForm({
     resolver: zodResolver(addProductFormSchema),
@@ -56,6 +61,12 @@ export default function AddProduct({ setIsProduct }: TAddProductProps) {
     if (!selectedBicycle) {
       setIsError({ ...isError, cycleType: "Please select a bicycle type" });
     }
+    if (!productStatus) {
+      setIsError({
+        ...isError,
+        productStatus: "Please select a product status",
+      });
+    }
     if (!thumbnail) {
       setIsError({ ...isError, thumbnail: "Please upload a thumbnail image" });
     }
@@ -66,12 +77,18 @@ export default function AddProduct({ setIsProduct }: TAddProductProps) {
       });
     }
 
-    if (isError.cycleType || isError.extraImage || isError.thumbnail) {
+    if (
+      isError.cycleType ||
+      isError.extraImage ||
+      isError.thumbnail ||
+      isError.productStatus === null
+    ) {
       setIsLoading(false);
       return;
     }
+    const toastId = toast.loading("Product Creating...");
 
-    const thumbnailUrl = await uploadImage(thumbnail);
+    const thumbnailUrl = await uploadImage(thumbnail!);
     const extraImageUrls = [];
     if (extraImage && extraImage.length > 0) {
       for (const image of extraImage) {
@@ -80,6 +97,7 @@ export default function AddProduct({ setIsProduct }: TAddProductProps) {
       }
     }
     const newProductData = {
+      brandName: data.brandName,
       productName: data.productName,
       productTitle: data.productTitle,
       description: data.description,
@@ -93,32 +111,28 @@ export default function AddProduct({ setIsProduct }: TAddProductProps) {
       },
       thumbnail: thumbnailUrl,
       extraImages: extraImageUrls,
+      productStatus,
+      quantity: data.quantity,
     };
 
-    console.log("newProductData ", newProductData);
-    setIsLoading(false);
-  };
+    try {
+      const result = await addProduct(newProductData).unwrap();
+      setIsLoading(false);
 
-  const dummy = {
-    productName: "this is name",
-    productTitle: "product title",
-    description: "this is a product description ",
-    ProductType: {
-      type: "Electric Bikes (e-Bikes)",
-      subType: "Electric Road/Hybrid Bikes",
-    },
-    prices: {
-      regular: 1256,
-      sale: 1200,
-    },
-    thumbnail:
-      "https://res.cloudinary.com/programmer-shipon/image/upload/v1738084356/bike-bicycle/products/world-colorful-and-neon-light-purple-and_oqauln.jpg",
-    extraImages: [
-      "https://res.cloudinary.com/programmer-shipon/image/upload/v1738084358/bike-bicycle/products/desktop-wallpaper-3d-nature-widescreen_crfyem.jpg",
-      "https://res.cloudinary.com/programmer-shipon/image/upload/v1738084359/bike-bicycle/products/desktop-wallpaper-spring-nature-scenes-in-collection_grbz3n.jpg",
-      "https://res.cloudinary.com/programmer-shipon/image/upload/v1738084359/bike-bicycle/products/purple-earth-wallpaper-preview_aooho2.jpg",
-      "https://res.cloudinary.com/programmer-shipon/image/upload/v1738084360/bike-bicycle/products/thumb-1920-197877_o6jk5d.jpg",
-    ],
+      toast.success(result?.message || "Product Created Success", {
+        id: toastId,
+      });
+      setIsProduct(true);
+      setProductStatus(null);
+      setSelectedBicycle(null);
+      setSelectedSubtype(null);
+      setThumbnail(null);
+      setExtraImage(null);
+    } catch (err) {
+      // console.log(err);
+      setIsLoading(false);
+      toast.error("Product Creating Failed!", { id: toastId });
+    }
   };
 
   return (
@@ -126,6 +140,27 @@ export default function AddProduct({ setIsProduct }: TAddProductProps) {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           <div className="space-y-6 col-span-2">
+            {/* brand name */}
+            <FormField
+              control={form.control}
+              name="brandName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">Brand name</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="text-base"
+                      placeholder="this a new product name"
+                      // value={field.value || ""}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-sm" />
+                </FormItem>
+              )}
+            />
+
+            {/* product name */}
             <FormField
               control={form.control}
               name="productName"
@@ -145,6 +180,7 @@ export default function AddProduct({ setIsProduct }: TAddProductProps) {
               )}
             />
 
+            {/* Product title */}
             <FormField
               control={form.control}
               name="productTitle"
@@ -163,6 +199,7 @@ export default function AddProduct({ setIsProduct }: TAddProductProps) {
               )}
             />
 
+            {/* description */}
             <FormField
               control={form.control}
               name="description"
@@ -228,6 +265,7 @@ export default function AddProduct({ setIsProduct }: TAddProductProps) {
               ) : null}
             </div>
 
+            {/* prices */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
@@ -269,6 +307,27 @@ export default function AddProduct({ setIsProduct }: TAddProductProps) {
               />
             </div>
 
+            {/* product quantity */}
+            <FormField
+              control={form.control}
+              name="quantity"
+              render={({ field }) => (
+                <FormItem className="col-span-1">
+                  <FormLabel className="text-base">Product Quantity</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="text-base"
+                      placeholder="Product quantity"
+                      type="number"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-sm" />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="tags"
@@ -286,6 +345,30 @@ export default function AddProduct({ setIsProduct }: TAddProductProps) {
                 </FormItem>
               )}
             />
+
+            <FormItem>
+              <FormLabel className="text-base">Product Status</FormLabel>
+              <FormControl>
+                <Select onValueChange={(value) => setProductStatus(value)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a Product Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem key={"bicycle.active"} value={"active"}>
+                        Active
+                      </SelectItem>
+                      <SelectItem key={"bicycle.inactive"} value={"inactive"}>
+                        inactive
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage className="text-sm">
+                {isError["cycleType"]}{" "}
+              </FormMessage>
+            </FormItem>
           </div>
 
           <div className="col-span-2 space-y-6">
@@ -328,7 +411,7 @@ export default function AddProduct({ setIsProduct }: TAddProductProps) {
                         className="w-full h-auto rounded-md"
                       />
                       <figure
-                        onClick={() => setThumbnail(undefined)}
+                        onClick={() => setThumbnail(null)}
                         className="p-1.5 bg-red-300/40 rounded absolute top-4 right-4 transition duration-300 hover:bg-red-500 cursor-pointer text-2xl"
                       >
                         {closeIcon}

@@ -16,11 +16,11 @@ const moduleRoutes = [
     route: UserRoutes,
   },
   {
-    path: "/products",
+    path: "/admin/products",
     route: productRoute,
   },
   {
-    path: "/products",
+    path: "/orders",
     route: orderRoute,
   },
 ];
