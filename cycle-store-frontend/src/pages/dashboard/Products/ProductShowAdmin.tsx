@@ -13,12 +13,18 @@ import { useGetAllProductsQuery } from "@/redux/features/admin/productApi.admin"
 import { Eye, Pencil, Trash } from "lucide-react";
 import { useState } from "react";
 import { SkewLoader } from "react-spinners";
+import { productsTabIndex } from "./ProductsConstant";
+import { TProduct } from "@/types";
 
 type TProductShow = {
-  setIsProduct: (value: boolean) => void;
+  setIsProduct: (value: string) => void;
+  setProductData: (value: TProduct) => void;
 };
 
-export default function ProductShow({ setIsProduct }: TProductShow) {
+export default function ProductShow({
+  setIsProduct,
+  setProductData,
+}: TProductShow) {
   const [page, setPage] = useState(1);
   const {
     data: productData,
@@ -43,6 +49,11 @@ export default function ProductShow({ setIsProduct }: TProductShow) {
       </div>
     );
   }
+
+  const handleUpdate = (data: TProduct) => {
+    setIsProduct(productsTabIndex.update as string);
+    setProductData(data);
+  };
 
   return (
     <>
@@ -83,7 +94,11 @@ export default function ProductShow({ setIsProduct }: TProductShow) {
                       <Button className="hover:bg-brand/20" variant="ghost">
                         <Eye className="h-4 w-4" />
                       </Button>
-                      <Button className="hover:bg-brand/20" variant="ghost">
+                      <Button
+                        onClick={() => handleUpdate(product)}
+                        className="hover:bg-brand/20"
+                        variant="ghost"
+                      >
                         <Pencil className="h-4 w-4" />
                       </Button>
                       <Button
@@ -124,7 +139,7 @@ export default function ProductShow({ setIsProduct }: TProductShow) {
       ) : (
         <div className="flex items-center justify-center min-h-[300px]">
           <Button
-            onClick={() => setIsProduct(false)}
+            onClick={() => setIsProduct(productsTabIndex.add as string)}
             className="!py-1.5 !px-1 text-semibold"
             variant="outline"
           >

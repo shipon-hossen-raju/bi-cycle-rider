@@ -28,12 +28,17 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { productsTabIndex } from "./ProductsConstant";
+import { TProduct } from "@/types";
 
 type TAddProductProps = {
   setIsProduct: (value: string) => void;
+  productData: TProduct | {};
 };
 
-export default function AddProduct({ setIsProduct }: TAddProductProps) {
+export default function UpdateProduct({
+  setIsProduct,
+  productData,
+}: TAddProductProps) {
   const [isError, setIsError] = useState<{
     cycleType?: string;
     thumbnail?: string;
@@ -47,6 +52,8 @@ export default function AddProduct({ setIsProduct }: TAddProductProps) {
   const [extraImage, setExtraImage] = useState<File[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [addProduct] = useAddProductMutation(undefined);
+
+  console.log("productData", productData);
 
   const form = useForm({
     resolver: zodResolver(addProductFormSchema),
