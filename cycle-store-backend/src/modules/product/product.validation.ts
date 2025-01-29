@@ -6,9 +6,9 @@ export const productZodSchema = z.object({
     brandName: z.string().min(1, "brand name cannot be empty"),
     productTitle: z.string().min(1, "Product title cannot be empty"),
     description: z.string().min(1, "Description cannot be empty"),
-    ProductType: z.object({
+    productType: z.object({
       type: z.string().min(1, "Type cannot be empty"),
-      subType: z.string().min(1, "SubType cannot be empty"),
+      subType: z.string().nullable().optional(),
     }),
     prices: z.object({
       regular: z

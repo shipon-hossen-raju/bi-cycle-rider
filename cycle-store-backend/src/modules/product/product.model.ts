@@ -23,7 +23,7 @@ const productSchema: Schema = new Schema(
       required: [true, "Description cannot be empty"],
       minlength: [1, "Description cannot be empty"],
     },
-    ProductType: {
+    productType: {
       type: {
         type: String,
         required: [true, "Type cannot be empty"],
@@ -31,8 +31,7 @@ const productSchema: Schema = new Schema(
       },
       subType: {
         type: String,
-        required: [true, "SubType cannot be empty"],
-        minlength: [1, "SubType cannot be empty"],
+        required: false,
       },
     },
     prices: {

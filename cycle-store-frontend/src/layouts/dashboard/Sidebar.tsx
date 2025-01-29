@@ -21,8 +21,6 @@ export const Sidebar = () => {
 
   const handleLogout = () => dispatch(logout());
 
-  console.log("navData", navData);
-
   return (
     <div className="w-64 bg-brand/5 border-r shadow-md flex flex-col justify-between">
       <div>

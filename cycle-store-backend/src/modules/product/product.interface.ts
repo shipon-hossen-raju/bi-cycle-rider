@@ -3,7 +3,7 @@ import { productZodSchema } from "./product.validation";
 
 interface IProductType {
   type: string;
-  subType: string;
+  subType?: string;
 }
 
 interface IPrices {
@@ -15,7 +15,7 @@ export interface IProduct extends Document {
   brandName: string;
   productTitle: string;
   description: string;
-  ProductType: IProductType;
+  productType: IProductType;
   prices: IPrices;
   thumbnail: string;
   extraImages: string[];

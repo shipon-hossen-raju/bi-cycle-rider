@@ -1,3 +1,5 @@
+import QueryBuilder from "../../builder/QueryBuilder";
+import { ProductSearchableFields } from "./product.constant";
 import { TProduct } from "./product.interface";
 import ProductModel from "./product.model";
 
@@ -8,22 +10,18 @@ const createProductDB = async (productData: TProduct) => {
 };
 
 // get all product
-const getAllProducts = async (searchTerm?: string) => {
-  return await ProductModel.find(
-    searchTerm
-      ? {
-          $or: [
-            { name: { $regex: searchTerm, $options: "i" } },
-            {
-              brand: { $regex: searchTerm, $options: "i" },
-            },
-            {
-              type: { $regex: searchTerm, $options: "i" },
-            },
-          ],
-        }
-      : {},
-  );
+const getAllProducts = async (query: Record<string, unknown> = {}) => {
+  const productsQuery = new QueryBuilder(ProductModel.find(), query)
+    .search(ProductSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await productsQuery.modelQuery;
+  const meta = await productsQuery.countTotal();
+
+  return { result, meta };
 };
 
 // get specific product

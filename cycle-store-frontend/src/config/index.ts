@@ -1,6 +1,3 @@
-// import { config as dotenvConfig } from "dotenv";
-// dotenvConfig();
-
 const node_env = import.meta.env.VITE_PUBLIC_NODE_ENV;
 
 export const config = {

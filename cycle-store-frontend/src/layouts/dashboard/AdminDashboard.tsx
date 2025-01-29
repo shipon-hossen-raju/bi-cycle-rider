@@ -17,7 +17,7 @@ export default function AdminDashboard() {
         <main className="flex-1 p-4 space-y-4 bg-gray-50 bg-brand/10">
           {/* <h1 className="text-2xl font-bold">Dashboard</h1> */}
 
-          <div className="max-h-[calc(100vh-110px)] h-full ">
+          <div className="max-h-[calc(100vh-110px)] h-full overflow-hidden">
             <Outlet />
           </div>
         </main>

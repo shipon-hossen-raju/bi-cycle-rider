@@ -23,28 +23,17 @@ const productCreateDB = catchAsync(async (req, res) => {
 });
 
 // get all products
-const getAllProducts = async (req: Request, res: Response) => {
-  try {
-    const { searchTerm } = req.query;
+const getAllProducts = catchAsync(async (req, res) => {
+  const getProducts = await productService.getAllProducts(req.query);
 
-    const getProducts = await productService.getAllProducts(
-      searchTerm as string,
-    );
-
-    //   send data
-    res.status(200).json({
-      message: "Bicycles retrieved successfully",
-      status: true,
-      data: getProducts,
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: "Something went wrong!",
-      error: error,
-    });
-  }
-};
+  sendResponse(res, {
+    message: "Bicycles retrieved successfully",
+    statusCode: statusCode.ok,
+    data: getProducts.result,
+    success: true,
+    meta: getProducts.meta,
+  });
+});
 
 // get all products
 const getSpecificProducts = async (req: Request, res: Response) => {
