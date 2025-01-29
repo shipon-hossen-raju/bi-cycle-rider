@@ -4,6 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.productService = void 0;
+const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
+const product_constant_1 = require("./product.constant");
 const product_model_1 = __importDefault(require("./product.model"));
 // create product
 const createProductDB = async (productData) => {
@@ -11,20 +13,16 @@ const createProductDB = async (productData) => {
     return await product.save();
 };
 // get all product
-const getAllProducts = async (searchTerm) => {
-    return await product_model_1.default.find(searchTerm
-        ? {
-            $or: [
-                { name: { $regex: searchTerm, $options: "i" } },
-                {
-                    brand: { $regex: searchTerm, $options: "i" },
-                },
-                {
-                    type: { $regex: searchTerm, $options: "i" },
-                },
-            ],
-        }
-        : {});
+const getAllProducts = async (query = {}) => {
+    const productsQuery = new QueryBuilder_1.default(product_model_1.default.find(), query)
+        .search(product_constant_1.ProductSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+    const result = await productsQuery.modelQuery;
+    const meta = await productsQuery.countTotal();
+    return { result, meta };
 };
 // get specific product
 const getSpecificProducts = async (id) => {

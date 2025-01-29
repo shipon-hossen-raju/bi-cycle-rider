@@ -25,36 +25,87 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const productSchema = new mongoose_1.Schema({
-    name: {
+    productName: {
         type: String,
-        required: [true, "Product name is required"],
-        trim: true,
-        minlength: [3, "Name must be at least 3 characters"],
+        required: [true, "Product name cannot be empty"],
+        minlength: [1, "Product name cannot be empty"],
     },
-    price: {
-        type: Number,
-        required: [true, "Price is required"],
-        min: [0, "Price must be at least 0"],
+    brandName: {
+        type: String,
+        required: [true, "Brand name cannot be empty"],
+        minlength: [1, "Brand name cannot be empty"],
+    },
+    productTitle: {
+        type: String,
+        required: [true, "Product title cannot be empty"],
+        minlength: [1, "Product title cannot be empty"],
+    },
+    description: {
+        type: String,
+        required: [true, "Description cannot be empty"],
+        minlength: [1, "Description cannot be empty"],
+    },
+    productType: {
+        type: {
+            type: String,
+            required: [true, "Type cannot be empty"],
+            minlength: [1, "Type cannot be empty"],
+        },
+        subType: {
+            type: String,
+            required: false,
+        },
+    },
+    prices: {
+        regular: {
+            type: Number,
+            required: [true, "Regular price is required"],
+            min: [0, "Regular price must be a non-negative integer"],
+        },
+        sale: {
+            type: Number,
+            required: [true, "Sale price is required"],
+            min: [0, "Sale price must be a non-negative integer"],
+        },
+    },
+    thumbnail: {
+        type: String,
+        required: [true, "Thumbnail is required"],
+        validate: {
+            validator: (v) => {
+                // Simple URL validation (you can use a more robust library if needed)
+                return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(v);
+            },
+            message: (props) => `${props.value} is not a valid URL!`,
+        },
+    },
+    extraImages: {
+        type: [String],
+        required: [true, "At least one extra image is required"],
+        validate: {
+            validator: (v) => {
+                return v.every((url) => /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/.test(url));
+            },
+            message: (props) => `${props.value} contains invalid URLs!`,
+        },
     },
     quantity: {
         type: Number,
-        required: true,
-        validate: {
-            validator: Number.isInteger,
-            message: "Quantity must be an integer",
-        },
+        required: [true, "Quantity is required"],
+        min: [0, "Quantity must be a non-negative integer"],
     },
-    type: {
+    productStatus: {
         type: String,
+        required: [true, "Product status is required"],
         enum: {
-            values: ["Mountain", "Road", "Hybrid", "BMX", "Electric"],
-            message: "Type must be one of Mountain, Road, Hybrid, BMX, or Electric",
+            values: ["active", "inActive"],
+            message: "Product status must be either 'active' or 'inActive'",
         },
-        required: true,
     },
     inStock: {
         type: Boolean,
         required: true,
+        default: true,
     },
 }, {
     timestamps: true,

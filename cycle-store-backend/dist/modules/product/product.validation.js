@@ -3,27 +3,39 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.productZodSchema = void 0;
 const zod_1 = require("zod");
 exports.productZodSchema = zod_1.z.object({
-    name: zod_1.z
-        .string()
-        .trim()
-        .min(3, { message: "Name must be at least 3 characters" }),
-    price: zod_1.z
-        .number({
-        required_error: "Price is required.",
-        invalid_type_error: "Price must be a number",
-    })
-        .positive("Price must be a positive number."),
-    quantity: zod_1.z
-        .number({
-        required_error: "Quantity is required.",
-        invalid_type_error: "Quantity must be a number",
-    })
-        .int()
-        .nonnegative("Quantity must be a non-negative integer."),
-    type: zod_1.z.enum(["Mountain", "Road", "Hybrid", "BMX", "Electric"], {
-        message: "Type must be one of Mountain, Road, Hybrid, BMX, or Electric",
+    body: zod_1.z.object({
+        productName: zod_1.z.string().min(1, "Product name cannot be empty"),
+        brandName: zod_1.z.string().min(1, "brand name cannot be empty"),
+        productTitle: zod_1.z.string().min(1, "Product title cannot be empty"),
+        description: zod_1.z.string().min(1, "Description cannot be empty"),
+        productType: zod_1.z.object({
+            type: zod_1.z.string().min(1, "Type cannot be empty"),
+            subType: zod_1.z.string().nullable().optional(),
+        }),
+        prices: zod_1.z.object({
+            regular: zod_1.z
+                .number({
+                required_error: "Quantity is required.",
+            })
+                .int()
+                .nonnegative("Quantity must be a non-negative integer."),
+            sale: zod_1.z
+                .number({
+                required_error: "Quantity is required.",
+            })
+                .int()
+                .nonnegative("Quantity must be a non-negative integer."),
+        }),
+        thumbnail: zod_1.z.string().url("Thumbnail must be a valid URL"),
+        extraImages: zod_1.z
+            .array(zod_1.z.string().url("Each extra image must be a valid URL"))
+            .min(1, "At least one extra image is required"),
+        quantity: zod_1.z
+            .number({
+            required_error: "Quantity is required.",
+        })
+            .int()
+            .nonnegative("Quantity must be a non-negative integer."),
+        productStatus: zod_1.z.enum(["active", "inActive"]),
     }),
-    inStock: zod_1.z.boolean(),
-    brand: zod_1.z.string().min(1, { message: "Brand is required" }),
-    description: zod_1.z.string().min(1, { message: "Description is required" }),
 });

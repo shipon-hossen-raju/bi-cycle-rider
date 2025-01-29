@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const catchAsync_1 = __importDefault(require("./catchAsync"));
 const validateRequest = (schema) => {
     return (0, catchAsync_1.default)(async (req, res, next) => {
-        console.log("req.body ", req.body);
+        // console.log("req.body ", req.body);
         await schema.parseAsync({
             body: req.body,
             cookies: req.cookies,
