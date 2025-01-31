@@ -1,7 +1,7 @@
 import express from "express";
 import { productController } from "./product.controller";
 import validateRequest from "../../utils/validationRequest";
-import { productZodSchema } from "./product.validation";
+import { productZodSchema, productZodSchemaUpdate } from "./product.validation";
 const route = express.Router();
 
 // product create or store route
@@ -18,7 +18,11 @@ route.get("/", productController.getAllProducts);
 route.get("/:productId", productController.getSpecificProducts);
 
 //  specific product data update
-route.put("/:productId", productController.getSpecificProductUpdate);
+route.put(
+  "/:productId",
+  validateRequest(productZodSchemaUpdate),
+  productController.getSpecificProductUpdate,
+);
 
 //  specific product data delete
 route.delete("/:productId", productController.specificProductDelete);

@@ -11,6 +11,13 @@ const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["adminProduct"],
     }),
+    productUpdate: builder.mutation({
+      query: (args) => ({
+        url: `/admin/products/${args.id}`,
+        method: "PUT",
+        body: args.data,
+      }),
+    }),
     getAllProducts: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
@@ -35,7 +42,19 @@ const productApi = baseApi.injectEndpoints({
         };
       },
     }),
+    deleteProducts: builder.mutation({
+      query: (id) => ({
+        url: `/admin/products/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["adminProduct"],
+    }),
   }),
 });
 
-export const { useAddProductMutation, useGetAllProductsQuery } = productApi;
+export const {
+  useAddProductMutation,
+  useGetAllProductsQuery,
+  useProductUpdateMutation,
+  useDeleteProductsMutation,
+} = productApi;

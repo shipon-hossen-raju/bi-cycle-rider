@@ -20,19 +20,19 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { bicycleTypeData } from "@/constants/admin";
-import { useAddProductMutation } from "@/redux/features/admin/productApi.admin";
+import { useProductUpdateMutation } from "@/redux/features/admin/productApi.admin";
+import { TProduct } from "@/types";
 import { uploadImage } from "@/utils/uploadsImage";
 import { addProductFormSchema } from "@/validations/admin.validation.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { productsTabIndex } from "./ProductsConstant";
-import { TProduct } from "@/types";
 
 type TAddProductProps = {
   setIsProduct: (value: string) => void;
-  productData: TProduct | {};
+  productData: TProduct;
 };
 
 export default function UpdateProduct({
@@ -45,18 +45,43 @@ export default function UpdateProduct({
     extraImage?: string;
     productStatus?: string;
   }>({});
-  const [selectedBicycle, setSelectedBicycle] = useState<string | null>(null);
+  const [selectedBicycle, setSelectedBicycle] = useState<string | null>(
+    productData?.ProductType?.type || null
+  );
+  const [selectedSubtype, setSelectedSubtype] = useState<string | null>(
+    productData?.ProductType?.subType || null
+  );
   const [productStatus, setProductStatus] = useState<string | null>(null);
-  const [selectedSubtype, setSelectedSubtype] = useState<string | null>(null);
-  const [thumbnail, setThumbnail] = useState<File | null>(null);
-  const [extraImage, setExtraImage] = useState<File[] | null>(null);
+  const [thumbnail, setThumbnail] = useState<string | File | null>(null);
+  const [extraImage, setExtraImage] = useState<(string | File)[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [addProduct] = useAddProductMutation(undefined);
+  const [productUpdate] = useProductUpdateMutation(undefined);
 
-  console.log("productData", productData);
+  useEffect(() => {
+    if (productData?.ProductType?.type) {
+      setSelectedBicycle(productData?.ProductType?.type);
+    }
+    if (productData?.ProductType?.subType) {
+      setSelectedSubtype(productData?.ProductType?.subType);
+    }
+    if (productData?.productStatus) {
+      setProductStatus(productData?.productStatus);
+    }
+    if (productData?.thumbnail) {
+      setThumbnail(productData?.thumbnail);
+    }
+    if (productData?.extraImages) {
+      setExtraImage(productData?.extraImages);
+    }
+  }, [productData]);
 
   const form = useForm({
     resolver: zodResolver(addProductFormSchema),
+    defaultValues: {
+      ...productData,
+      pricesSale: productData.prices.sale,
+      pricesRegular: productData.prices.regular,
+    },
   });
 
   const subTypeData = bicycleTypeData.find(
@@ -65,6 +90,12 @@ export default function UpdateProduct({
 
   const onSubmit = async (data: any) => {
     setIsLoading(true);
+    setIsError({
+      cycleType: "",
+      productStatus: "",
+      thumbnail: "",
+      extraImage: "",
+    });
 
     if (!selectedBicycle) {
       setIsError({ ...isError, cycleType: "Please select a bicycle type" });
@@ -89,18 +120,19 @@ export default function UpdateProduct({
       isError.cycleType ||
       isError.extraImage ||
       isError.thumbnail ||
-      isError.productStatus === null
+      isError.productStatus
     ) {
       setIsLoading(false);
       return;
     }
     const toastId = toast.loading("Product Creating...");
 
-    const thumbnailUrl = await uploadImage(thumbnail!);
+    const thumbnailUrl =
+      thumbnail instanceof File ? await uploadImage(thumbnail!) : thumbnail;
     const extraImageUrls = [];
     if (extraImage && extraImage.length > 0) {
       for (const image of extraImage) {
-        const imgUrl = await uploadImage(image);
+        const imgUrl = image instanceof File ? await uploadImage(image) : image;
         extraImageUrls.push(imgUrl);
       }
     }
@@ -123,8 +155,14 @@ export default function UpdateProduct({
       quantity: data.quantity,
     };
 
+    toast.error("Product Creating Failed!", { id: toastId });
+    setIsLoading(false);
+
     try {
-      const result = await addProduct(newProductData).unwrap();
+      const result = await productUpdate({
+        id: productData?._id,
+        data: newProductData,
+      }).unwrap();
       setIsLoading(false);
 
       toast.success(result?.message || "Product Created Success", {
@@ -159,7 +197,7 @@ export default function UpdateProduct({
                     <Input
                       className="text-base"
                       placeholder="this a new product name"
-                      // value={field.value || ""}
+                      // value={field.value}
                       {...field}
                     />
                   </FormControl>
@@ -233,9 +271,15 @@ export default function UpdateProduct({
               <FormItem>
                 <FormLabel className="text-base">Product type</FormLabel>
                 <FormControl>
-                  <Select onValueChange={(value) => setSelectedBicycle(value)}>
+                  <Select
+                    onValueChange={(value) => setSelectedBicycle(value)}
+                    defaultValue={productData?.ProductType?.type as string}
+                  >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a Bicycle Type" />
+                      <SelectValue
+                        placeholder="Select a Bicycle Type"
+                        defaultValue={productData?.ProductType?.type as string}
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
@@ -249,27 +293,35 @@ export default function UpdateProduct({
                   </Select>
                 </FormControl>
                 <FormMessage className="text-sm">
-                  {" "}
-                  {isError["cycleType"]}{" "}
+                  {isError["cycleType"]}
                 </FormMessage>
               </FormItem>
 
               {/* Subtype Selector */}
               {subTypeData?.subtypes?.length ? (
-                <Select onValueChange={(value) => setSelectedSubtype(value)}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a Subtype" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {subTypeData?.subtypes.map((subtype) => (
-                        <SelectItem key={subtype} value={subtype}>
-                          {subtype}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                <FormItem>
+                  <FormLabel className="text-base">Sub Product type</FormLabel>
+                  <Select
+                    onValueChange={(value) => setSelectedSubtype(value)}
+                    defaultValue={selectedSubtype || undefined}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue
+                        placeholder="Select a Subtype"
+                        defaultValue={selectedSubtype as string}
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {subTypeData?.subtypes.map((subtype) => (
+                          <SelectItem key={subtype} value={subtype}>
+                            {subtype}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormItem>
               ) : null}
             </div>
 
@@ -336,6 +388,7 @@ export default function UpdateProduct({
               )}
             />
 
+            {/* tags */}
             <FormField
               control={form.control}
               name="tags"
@@ -354,20 +407,27 @@ export default function UpdateProduct({
               )}
             />
 
+            {/* product status */}
             <FormItem>
               <FormLabel className="text-base">Product Status</FormLabel>
               <FormControl>
-                <Select onValueChange={(value) => setProductStatus(value)}>
+                <Select
+                  onValueChange={(value) => setProductStatus(value)}
+                  defaultValue={productData.productStatus || undefined}
+                >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a Product Status" />
+                    <SelectValue
+                      placeholder="Select a Product Status"
+                      defaultValue={productData.productStatus || undefined}
+                    />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
                       <SelectItem key={"bicycle.active"} value={"active"}>
                         Active
                       </SelectItem>
-                      <SelectItem key={"bicycle.inactive"} value={"inactive"}>
-                        inactive
+                      <SelectItem key={"bicycle.inactive"} value={"inActive"}>
+                        inActive
                       </SelectItem>
                     </SelectGroup>
                   </SelectContent>
@@ -414,7 +474,11 @@ export default function UpdateProduct({
                   ) : (
                     <div className="mt-4 relative">
                       <img
-                        src={URL.createObjectURL(thumbnail)}
+                        src={
+                          thumbnail instanceof File
+                            ? URL.createObjectURL(thumbnail)
+                            : thumbnail
+                        }
                         alt="Thumbnail Preview"
                         className="w-full h-auto rounded-md"
                       />
@@ -448,7 +512,11 @@ export default function UpdateProduct({
                     extraImage.map((file, index) => (
                       <div key={`extra${index}`} className="relative">
                         <img
-                          src={URL.createObjectURL(file)}
+                          src={
+                            file instanceof File
+                              ? URL.createObjectURL(file)
+                              : file
+                          }
                           alt={`Extra Image Preview ${index + 1}`}
                           className="w-full h-auto rounded-md"
                         />
@@ -486,7 +554,7 @@ export default function UpdateProduct({
                           setIsError({ ...isError, extraImage: "" });
                           setExtraImage([
                             ...(extraImage || []),
-                            ...Array.from(e.target.files || []),
+                            ...Array.from(e.target.files),
                           ]);
                         }
                       }}
@@ -524,7 +592,7 @@ export default function UpdateProduct({
                 <span>Creating...</span>
               </span>
             ) : (
-              <span> Create Product </span>
+              <span> Update Product </span>
             )}{" "}
           </Button>
         </div>

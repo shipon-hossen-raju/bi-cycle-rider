@@ -18,10 +18,27 @@ export interface IProduct extends Document {
   productType: IProductType;
   prices: IPrices;
   thumbnail: string;
+  tags: string;
   extraImages: string[];
   quantity: number;
   productStatus: "active" | "inActive";
   inStock: {
+    type: BooleanConstructor;
+  };
+}
+export interface IProductUpdate extends Document {
+  productName?: string;
+  brandName?: string;
+  productTitle?: string;
+  description?: string;
+  productType?: IProductType;
+  prices?: IPrices;
+  thumbnail?: string;
+  tags?: string;
+  extraImages?: string[];
+  quantity?: number;
+  productStatus?: "active" | "inActive";
+  inStock?: {
     type: BooleanConstructor;
   };
 }

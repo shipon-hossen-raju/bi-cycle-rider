@@ -1,6 +1,6 @@
 import QueryBuilder from "../../builder/QueryBuilder";
 import { ProductSearchableFields } from "./product.constant";
-import { TProduct } from "./product.interface";
+import { IProduct, IProductUpdate, TProduct } from "./product.interface";
 import ProductModel from "./product.model";
 
 // create product
@@ -30,26 +30,16 @@ const getSpecificProducts = async (id: string) => {
 };
 
 // get specific product update
-type TProductUpdated = { price?: number; quantity?: number };
 const getSpecificProductUpdate = async (
   id: string,
-  bodyData: TProductUpdated,
+  bodyData: IProductUpdate,
 ) => {
-  const updateData: TProductUpdated = {};
-
-  if (bodyData.price) {
-    updateData.price = bodyData.price;
-  }
-  if (bodyData.quantity) {
-    updateData.quantity = bodyData.quantity;
-  }
-
-  // specific product update
-  const updated = await ProductModel.findOneAndUpdate({ _id: id }, updateData, {
+  const updatedProduct = await ProductModel.findByIdAndUpdate(id, bodyData, {
     new: true,
+    runValidators: true,
   });
 
-  return updated;
+  return updatedProduct;
 };
 
 // get specific product update

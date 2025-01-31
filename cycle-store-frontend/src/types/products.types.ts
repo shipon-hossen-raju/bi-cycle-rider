@@ -15,5 +15,6 @@ export interface TProduct {
   thumbnail: string;
   extraImages: string[];
   quantity: number;
+  tags: string;
   productStatus: "active" | "inActive";
 }

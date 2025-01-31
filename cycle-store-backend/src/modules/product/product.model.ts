@@ -23,6 +23,10 @@ const productSchema: Schema = new Schema(
       required: [true, "Description cannot be empty"],
       minlength: [1, "Description cannot be empty"],
     },
+    tags: {
+      type: String,
+      required: false,
+    },
     productType: {
       type: {
         type: String,
@@ -88,6 +92,14 @@ const productSchema: Schema = new Schema(
       type: Boolean,
       required: true,
       default: true,
+    },
+    ratings: {
+      type: [String],
+      default: [],
+    },
+    reviews: {
+      type: [String],
+      default: [],
     },
   },
   {

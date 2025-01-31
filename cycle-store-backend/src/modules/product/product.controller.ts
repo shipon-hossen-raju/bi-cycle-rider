@@ -57,53 +57,37 @@ const getSpecificProducts = async (req: Request, res: Response) => {
 };
 
 // get all products
-const getSpecificProductUpdate = async (req: Request, res: Response) => {
-  try {
-    const { productId } = req.params;
-    const bodyData = req.body;
+const getSpecificProductUpdate = catchAsync(async (req, res) => {
+  const { productId } = req.params;
+  const bodyData = { ...req.body, ratings: [], reviews: [] };
 
-    const getProductUpdated = await productService.getSpecificProductUpdate(
-      productId,
-      bodyData,
-    );
+  const getProductUpdated = await productService.getSpecificProductUpdate(
+    productId,
+    bodyData,
+  );
 
-    //   send data
-    res.status(200).json({
-      message: "Bicycle updated successfully",
-      status: true,
-      data: getProductUpdated,
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: "Something went wrong!",
-      error: error,
-    });
-  }
-};
+  //   send data
+  sendResponse(res, {
+    message: "Bicycle updated successfully",
+    statusCode: statusCode.ok,
+    success: true,
+    data: getProductUpdated,
+  });
+});
 
 // get all products
-const specificProductDelete = async (req: Request, res: Response) => {
-  try {
-    const { productId } = req.params;
+const specificProductDelete = catchAsync(async (req, res) => {
+  const { productId } = req.params;
 
-    const productDeleted =
-      await productService.specificProductDelete(productId);
+  const productDeleted = await productService.specificProductDelete(productId);
 
-    //   send data
-    res.status(200).json({
-      message: "Bicycle deleted successfully",
-      status: true,
-      data: productDeleted.deletedCount && {},
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: "Something went wrong!",
-      error: error,
-    });
-  }
-};
+  sendResponse(res, {
+    message: "Bicycle deleted successfully",
+    success: true,
+    statusCode: statusCode.ok,
+    data: productDeleted && {},
+  });
+});
 
 export const productController = {
   productCreateDB,

@@ -102,6 +102,7 @@ export default function AddProduct({ setIsProduct }: TAddProductProps) {
       productName: data.productName,
       productTitle: data.productTitle,
       description: data.description,
+      tags: data.description,
       productType: {
         type: selectedBicycle,
         subType: subTypeData?.subtypes?.length ? selectedSubtype : null,

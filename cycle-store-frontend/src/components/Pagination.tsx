@@ -12,10 +12,7 @@ export default function Pagination({
   const currentPage = metaData.page;
   const totalPages = metaData.totalPage;
 
-  console.log("metaData ", metaData);
-
   const handlePageChange = (pageNum: number) => {
-    console.log("pageNum ", pageNum);
     if (pageNum > 0) {
       setPage(Number(pageNum));
     }

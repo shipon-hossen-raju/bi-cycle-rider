@@ -8,7 +8,7 @@ import { TProduct } from "@/types";
 
 export default function Products() {
   const [isProduct, setIsProduct] = useState<string | undefined>("SHOW");
-  const [productData, setProductData] = useState<TProduct | {}>({});
+  const [productData, setProductData] = useState<TProduct>();
 
   return (
     <div className="space-y-4">
@@ -46,7 +46,7 @@ export default function Products() {
       </div>
 
       {/* product lists */}
-      <div className="bg-white/50 rounded space-y-0 p-5 max-h-[calc(100vh-140px)] overflow-y-scroll">
+      <div className="bg-white/50 rounded space-y-0 p-5 overflow-y-scroll">
         {isProduct === productsTabIndex.show ? (
           <ProductShow
             setProductData={setProductData}

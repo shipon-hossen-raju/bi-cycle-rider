@@ -9,12 +9,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { useGetAllProductsQuery } from "@/redux/features/admin/productApi.admin";
+import {
+  useDeleteProductsMutation,
+  useGetAllProductsQuery,
+} from "@/redux/features/admin/productApi.admin";
 import { Eye, Pencil, Trash } from "lucide-react";
 import { useState } from "react";
 import { SkewLoader } from "react-spinners";
 import { productsTabIndex } from "./ProductsConstant";
 import { TProduct } from "@/types";
+import { toast } from "sonner";
 
 type TProductShow = {
   setIsProduct: (value: string) => void;
@@ -25,6 +29,7 @@ export default function ProductShow({
   setIsProduct,
   setProductData,
 }: TProductShow) {
+  const [deleteProducts] = useDeleteProductsMutation(undefined);
   const [page, setPage] = useState(1);
   const {
     data: productData,
@@ -36,10 +41,16 @@ export default function ProductShow({
       value: page,
     },
   ]);
-  // const isLoading = true;
 
-  const handleDelete = (id: string) => {
-    console.log("delete id ", id);
+  const handleDelete = async (id: string) => {
+    const toastId = toast.loading("Product deleting");
+    try {
+      await deleteProducts(id).unwrap();
+
+      toast.success("Product Deleted success", { id: toastId });
+    } catch (err: any) {
+      toast.error(`${err?.data?.message}`, { id: toastId });
+    }
   };
 
   if (isLoading || isFetching) {

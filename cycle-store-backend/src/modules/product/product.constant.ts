@@ -3,4 +3,5 @@ export const ProductSearchableFields = [
   "brandName",
   "productTitle",
   "description",
+  "tags",
 ];
