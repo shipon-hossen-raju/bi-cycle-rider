@@ -1,7 +1,7 @@
 type TSectionTitle = {
   subtitle: string;
   title: string;
-  description: string;
+  description?: string;
   parentStyle?: string;
 };
 

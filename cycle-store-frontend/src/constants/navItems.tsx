@@ -12,6 +12,7 @@ import Shop from "@/pages/Shop/Shop";
 import About from "@/pages/About/About";
 import Contact from "@/pages/Contact/Contact";
 import Account from "@/pages/user/Account";
+import ProductDetails from "@/pages/Shop/ProductDetails";
 
 export const navItems: TNavItems[] = [
   {
@@ -25,6 +26,11 @@ export const navItems: TNavItems[] = [
     name: "Shop",
     path: "/shop",
     element: <Shop />,
+  },
+  {
+    id: "2-product",
+    path: "/product/:productId",
+    element: <ProductDetails />,
   },
   {
     id: "3-about",

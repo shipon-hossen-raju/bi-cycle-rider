@@ -36,25 +36,17 @@ const getAllProducts = catchAsync(async (req, res) => {
 });
 
 // get all products
-const getSpecificProducts = async (req: Request, res: Response) => {
-  try {
-    const { productId } = req.params;
-    const getProducts = await productService.getSpecificProducts(productId);
+const getSpecificProducts = catchAsync(async (req: Request, res: Response) => {
+  const { productId } = req.params;
+  const getProducts = await productService.getSpecificProducts(productId);
 
-    //   send data
-    res.status(200).json({
-      message: "Bicycle retrieved successfully",
-      status: true,
-      data: getProducts,
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: "Something went wrong!",
-      error: error,
-    });
-  }
-};
+  sendResponse(res, {
+    message: "Bicycle retrieved successfully",
+    statusCode: statusCode.ok,
+    success: true,
+    data: getProducts,
+  });
+});
 
 // get all products
 const getSpecificProductUpdate = catchAsync(async (req, res) => {
