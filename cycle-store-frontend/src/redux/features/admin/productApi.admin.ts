@@ -49,12 +49,11 @@ const productApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["adminProduct"],
     }),
-    getSingleProduct: builder.mutation({
+    getSingleProduct: builder.query({
       query: (id) => ({
         url: `/admin/products/${id}`,
-        method: "DELETE",
+        method: "GET",
       }),
-      invalidatesTags: ["adminProduct"],
     }),
   }),
 });
@@ -63,6 +62,5 @@ export const {
   useAddProductMutation,
   useGetAllProductsQuery,
   useProductUpdateMutation,
-  useDeleteProductsMutation,
-  useGetSingleProductMutation
+  useDeleteProductsMutation,useGetSingleProductQuery
 } = productApi;

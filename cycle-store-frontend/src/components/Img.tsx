@@ -8,6 +8,7 @@ interface ImageProps {
   className?: string; // Optional custom class
   objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down"; // Object-fit style
   objectPosition?: string; // CSS object-position value
+  style?: React.CSSProperties; // Optional inline styles
 }
 
 const CustomImage: React.FC<ImageProps> = ({
@@ -18,6 +19,7 @@ const CustomImage: React.FC<ImageProps> = ({
   className,
   objectFit = "cover",
   objectPosition = "center",
+  style
 }) => {
   // Convert src to a string if it's not already
   //   const srcString = typeof src === "string" ? src : src?.src;
@@ -35,6 +37,7 @@ const CustomImage: React.FC<ImageProps> = ({
         height={height as number}
         className={className}
         style={{
+          ...style,
           objectFit,
           objectPosition,
         }}
