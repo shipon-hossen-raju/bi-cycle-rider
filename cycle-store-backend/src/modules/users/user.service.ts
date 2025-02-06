@@ -1,5 +1,7 @@
+import QueryBuilder from "../../builder/QueryBuilder";
 import config from "../../config";
 import { createToken } from "../auth/auth.utils";
+import { userSearchFields } from "./user.constant";
 import { User } from "./user.model";
 import { TUser } from "./user.type";
 
@@ -29,6 +31,21 @@ const createUserIntoDB = async (userData: TUser) => {
   };
 };
 
+const getAllUsers = async (query: Record<string, unknown> = {}) => {
+  const usersQuery = new QueryBuilder(User.find(), query)
+    .search(userSearchFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await usersQuery.modelQuery;
+  const meta = await usersQuery.countTotal();
+
+  return { result, meta };
+};
+
 export const userService = {
   createUserIntoDB,
+  getAllUsers,
 };
