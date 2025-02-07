@@ -29,12 +29,12 @@ export const Sidebar = () => {
         <nav className="flex flex-col space-y-2 px-4">
           {navData.map((item) => (
             <Link
-              to={item.path}
-              key={item.id}
+              to={item?.path || "#"}
+              key={item?.id}
               className="relative flex items-center gap-3 text-base font-medium hover:bg-brand/90 hover:text-white px-2 py-1 rounded transition duration-300 "
             >
-              <figure className="">{item.icon}</figure>
-              <span className="">{item.name}</span>
+              <figure className="">{item?.icon}</figure>
+              <span className="">{item?.name}</span>
             </Link>
           ))}
         </nav>

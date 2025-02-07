@@ -15,8 +15,8 @@ export type TNavItems = {
 
 export type TAdminRoute = {
   id: string;
-  name: string;
+  name?: string;
   path: string;
-  icon: JSX.Element;
+  icon?: JSX.Element;
   element: JSX.Element;
 };

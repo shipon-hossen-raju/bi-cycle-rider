@@ -13,6 +13,9 @@ import About from "@/pages/About/About";
 import Contact from "@/pages/Contact/Contact";
 import Account from "@/pages/user/Account";
 import ProductDetails from "@/pages/Shop/ProductDetails";
+import Users from "@/pages/dashboard/Users/Users";
+import { usersIcon } from "@/assets/icons/globalIcon";
+import UserDetails from "@/pages/dashboard/Users/UserDetails";
 
 export const navItems: TNavItems[] = [
   {
@@ -72,5 +75,17 @@ export const adminNavItems: TAdminRoute[] = [
     path: "/dashboard/orders",
     icon: ordersIcon,
     element: <Orders />,
+  },
+  {
+    id: "3-users",
+    name: "Users",
+    path: "/dashboard/users",
+    icon: usersIcon,
+    element: <Users />,
+  },
+  {
+    id: "3-details",
+    path: "/dashboard/users/:userId",
+    element: <UserDetails />,
   },
 ];

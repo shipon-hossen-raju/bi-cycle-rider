@@ -12,7 +12,10 @@ router.post(
   userController.createUser,
 );
 
+// all users
+router.get("/", userController.findAllUsers);
 
-router.get('/' , userController.findAllUsers)
+// single user
+router.get("/:userId", userController.findUser);
 
 export const UserRoutes = router;

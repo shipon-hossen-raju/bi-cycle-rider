@@ -11,14 +11,18 @@ export const navItemsGenerators = (navItems: TNavItems[]) => {
 };
 
 export const adminNavItemsGenerators = (navItems: TAdminRoute[]) => {
-  return navItems.map((item) => {
-    return {
-      id: item.id,
-      name: item.name,
-      path: item.path,
-      icon: item.icon,
-    };
-  });
+  return navItems
+    .map((item) => {
+      if (item?.name || item?.icon) {
+        return {
+          id: item.id,
+          name: item?.name,
+          path: item.path,
+          icon: item?.icon,
+        };
+      }
+    })
+    .filter(Boolean);
 };
 
 export const appRoutesGenerators = (navItems: TNavItems[]) => {

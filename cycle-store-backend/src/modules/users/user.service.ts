@@ -45,7 +45,12 @@ const getAllUsers = async (query: Record<string, unknown> = {}) => {
   return { result, meta };
 };
 
+const getSingleUser = async (id: string) => {
+  return await User.findById(id);
+}
+
 export const userService = {
   createUserIntoDB,
   getAllUsers,
+  getSingleUser,
 };

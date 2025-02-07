@@ -28,7 +28,21 @@ const findAllUsers = catchAsync(async (req, res) => {
   })
 })
 
+const findUser = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+
+  const getUser = await userService.getSingleUser(userId);
+
+  sendResponse(res, {
+    message: "User retrieved successfully",
+    statusCode: statusCode.ok,
+    success: true,
+    data: getUser,
+  });
+})
+
 export const userController = {
   createUser,
   findAllUsers,
+  findUser,
 };
