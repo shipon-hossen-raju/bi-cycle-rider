@@ -9,6 +9,7 @@ const createUserIntoDB = async (userData: TUser) => {
   const user = await User.create(userData);
 
   const jwtPayload = {
+    _id: user._id,
     email: user.email,
     role: user.role,
   };
@@ -47,7 +48,7 @@ const getAllUsers = async (query: Record<string, unknown> = {}) => {
 
 const getSingleUser = async (id: string) => {
   return await User.findById(id);
-}
+};
 
 export const userService = {
   createUserIntoDB,

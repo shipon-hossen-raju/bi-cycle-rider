@@ -7,6 +7,8 @@ const loginUser = catchAsync(async (req, res) => {
   console.log("req.body ", req.body);
   const result = await authService.loginUser(req.body);
 
+  console.log("login result ", result);
+  
   sendResponse(res, {
     success: true,
     statusCode: statusCode.ok,

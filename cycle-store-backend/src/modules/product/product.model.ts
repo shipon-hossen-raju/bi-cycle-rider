@@ -49,6 +49,13 @@ const productSchema: Schema = new Schema(
         required: [true, "Sale price is required"],
         min: [0, "Sale price must be a non-negative integer"],
       },
+      currency: {
+        type: String,
+        required: [true, "Currency is required"],
+        enum: ["USD", "EUR", "INR", "BDT"],
+        message: "Currency must be one of 'USD', 'EUR', 'GBP', 'JPY', 'INR'",
+        default: "BDT"
+      },
     },
     thumbnail: {
       type: String,

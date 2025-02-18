@@ -6,7 +6,7 @@ import { TLoginUser } from "./auth.type";
 import { createToken } from "./auth.utils";
 
 const loginUser = async (payload: TLoginUser) => {
-  const user = await User.findOne({ email: payload.email });
+  const user = await User.findOne({ email: payload.email }).select("+password");
 
   if (!user) {
     throw new AppError(statusCode.notFound, "User not found!");
@@ -22,10 +22,12 @@ const loginUser = async (payload: TLoginUser) => {
   }
 
   const isPWM = await User.isPasswordMatched(payload.password, user.password);
+
   if (!isPWM)
     throw new AppError(statusCode.forbidden, "Password do not matched!");
 
   const jwtPayload = {
+    _id: user._id,
     email: user.email,
     role: user.role,
   };
