@@ -17,4 +17,5 @@ export interface TProduct {
   quantity: number;
   tags: string;
   productStatus: "active" | "inActive";
+  inStock: boolean;
 }

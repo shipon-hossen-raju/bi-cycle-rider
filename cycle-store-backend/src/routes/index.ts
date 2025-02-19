@@ -3,6 +3,7 @@ import { productRoute } from "../modules/product/product.routes";
 import { UserRoutes } from "../modules/users/user.route";
 import { authRoute } from "../modules/auth/auth.route";
 import { paymentRoute } from "../modules/payments/payments.route";
+import { addToCartRoute } from "../modules/addToCart/addToCart.route";
 
 const appRouter = Router();
 
@@ -22,6 +23,10 @@ const moduleRoutes = [
   {
     path: "/payments",
     route: paymentRoute,
+  },
+  {
+    path: "/add-to-cart",
+    route: addToCartRoute,
   },
 ];
 

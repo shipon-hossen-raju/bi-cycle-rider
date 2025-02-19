@@ -1,13 +1,14 @@
+import useUser from "@/hooks/useUser";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import Button from "../../components/Button";
 import MainContainer from "../../components/MainContainer";
-import { logout, useCurrentUser } from "../../redux/features/auth/authSlice";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { logout } from "../../redux/features/auth/authSlice";
+import { useAppDispatch } from "../../redux/hooks";
 
 export default function Account() {
   const dispatch = useAppDispatch();
-  const user = useAppSelector(useCurrentUser);
+  const user = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {

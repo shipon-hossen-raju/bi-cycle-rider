@@ -20,7 +20,7 @@ export default function Input({
   return (
     <div className="mb-4">
       {label && (
-        <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+        <label htmlFor={name} className="block text-gray-700 font-medium mb-2">
           {label}
         </label>
       )}

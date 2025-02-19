@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
 export type TTokenUser = {
+  _id: string;
   email: string;
   role: string;
   iat: number;

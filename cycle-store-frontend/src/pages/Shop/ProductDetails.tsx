@@ -2,23 +2,32 @@ import Button from "@/components/Button";
 import CustomImage from "@/components/Img";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import useUser from "@/hooks/useUser";
 import { useGetSingleProductQuery } from "@/redux/features/admin/productApi.admin";
+import { useGetSingleUserQuery } from "@/redux/features/users/usersApi";
 import { TProduct } from "@/types";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { SkewLoader } from "react-spinners";
+import ProductOrder from "./ProductOrder";
 
 export default function ProductDetails() {
   const { productId } = useParams();
   const { data, isLoading, isFetching } = useGetSingleProductQuery(productId);
+  const user = useUser();
+  const { data: userData } = useGetSingleUserQuery(user?._id);
   const [productImages, setProductImages] = useState<string[]>();
   const [selectedImage, setSelectedImage] = useState<string>();
   const [productData, setProductData] = useState<TProduct>();
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   useEffect(() => {
     setProductData(data?.data);
     setSelectedImage(data?.data?.thumbnail);
-    setProductImages([...(data?.data?.extraImages || []), data?.data?.thumbnail]);
+    setProductImages([
+      ...(data?.data?.extraImages || []),
+      data?.data?.thumbnail,
+    ]);
   }, [data]);
 
   if (isLoading || isFetching) {
@@ -28,6 +37,10 @@ export default function ProductDetails() {
       </div>
     );
   }
+
+  const handleBuyProduct = async () => {
+    setIsOpenModal(!isOpenModal);
+  };
 
   return (
     <>
@@ -46,6 +59,7 @@ export default function ProductDetails() {
                 />
               )}
             </Card>
+
             {/* Extra Images */}
             {productImages?.length ? (
               <div className="flex gap-2 mt-4">
@@ -121,13 +135,26 @@ export default function ProductDetails() {
               <Button className="mt-6 w-full" disabled={!productData?.inStock}>
                 {productData?.inStock ? "Add to Cart" : "Sold Out"}
               </Button>
-              <Button className="mt-6 w-" disabled={!productData?.inStock}>
-                {productData?.inStock ? "Buy" : "Sold Out"}
+              <Button
+                onClick={() => handleBuyProduct()}
+                className="mt-6 min-w-max"
+                disabled={!productData?.inStock}
+              >
+                {productData?.inStock ? "Buy Now" : "Sold Out"}
               </Button>
             </div>
           </div>
         </div>
       </div>
+
+      {isOpenModal && productData && (
+        <ProductOrder
+          isOpenModal={isOpenModal}
+          setIsOpenModal={setIsOpenModal}
+          product={productData}
+          userData={userData?.data}
+        />
+      )}
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { TProduct, TQueryParam, TResponseRedux, TUser } from "@/types";
+import { TQueryParam, TResponseRedux, TUser } from "@/types";
 import { baseApi } from "../../baseApi/baseApi";
 
 const usersApi = baseApi.injectEndpoints({
@@ -30,13 +30,10 @@ const usersApi = baseApi.injectEndpoints({
     getSingleUser: builder.query({
       query: (id) => ({
         url: `/users/${id}`,
-        method: 'GET'
-      })
-    })
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const {
-  useGetAllUsersQuery,
-  useGetSingleUserQuery
-} = usersApi;
+export const { useGetAllUsersQuery, useGetSingleUserQuery } = usersApi;

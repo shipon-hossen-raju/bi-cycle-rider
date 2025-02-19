@@ -65,6 +65,7 @@ const Login: React.FC = () => {
     const toastId = toast.loading("Logging in");
 
     try {
+      console.log('formData ', formData)
       const result = await login(formData).unwrap();
       const data = result?.data;
       const user = verifyToken(data.accessToken);
