@@ -16,7 +16,7 @@ route.get("/", product_controller_1.productController.getAllProducts);
 // get specific product data
 route.get("/:productId", product_controller_1.productController.getSpecificProducts);
 //  specific product data update
-route.put("/:productId", product_controller_1.productController.getSpecificProductUpdate);
+route.put("/:productId", (0, validationRequest_1.default)(product_validation_1.productZodSchemaUpdate), product_controller_1.productController.getSpecificProductUpdate);
 //  specific product data delete
 route.delete("/:productId", product_controller_1.productController.specificProductDelete);
 exports.productRoute = route;

@@ -28,19 +28,13 @@ const getAllProducts = async (query = {}) => {
 const getSpecificProducts = async (id) => {
     return await product_model_1.default.findOne({ _id: id });
 };
+// get specific product update
 const getSpecificProductUpdate = async (id, bodyData) => {
-    const updateData = {};
-    if (bodyData.price) {
-        updateData.price = bodyData.price;
-    }
-    if (bodyData.quantity) {
-        updateData.quantity = bodyData.quantity;
-    }
-    // specific product update
-    const updated = await product_model_1.default.findOneAndUpdate({ _id: id }, updateData, {
+    const updatedProduct = await product_model_1.default.findByIdAndUpdate(id, bodyData, {
         new: true,
+        runValidators: true,
     });
-    return updated;
+    return updatedProduct;
 };
 // get specific product update
 const specificProductDelete = async (id) => {

@@ -35,66 +35,40 @@ const getAllProducts = (0, catchAsync_1.default)(async (req, res) => {
     });
 });
 // get all products
-const getSpecificProducts = async (req, res) => {
-    try {
-        const { productId } = req.params;
-        const getProducts = await product_service_1.productService.getSpecificProducts(productId);
-        //   send data
-        res.status(200).json({
-            message: "Bicycle retrieved successfully",
-            status: true,
-            data: getProducts,
-        });
-    }
-    catch (error) {
-        res.status(400).json({
-            success: false,
-            message: "Something went wrong!",
-            error: error,
-        });
-    }
-};
+const getSpecificProducts = (0, catchAsync_1.default)(async (req, res) => {
+    const { productId } = req.params;
+    const getProducts = await product_service_1.productService.getSpecificProducts(productId);
+    (0, sendResponse_1.default)(res, {
+        message: "Bicycle retrieved successfully",
+        statusCode: status_code_1.default.ok,
+        success: true,
+        data: getProducts,
+    });
+});
 // get all products
-const getSpecificProductUpdate = async (req, res) => {
-    try {
-        const { productId } = req.params;
-        const bodyData = req.body;
-        const getProductUpdated = await product_service_1.productService.getSpecificProductUpdate(productId, bodyData);
-        //   send data
-        res.status(200).json({
-            message: "Bicycle updated successfully",
-            status: true,
-            data: getProductUpdated,
-        });
-    }
-    catch (error) {
-        res.status(400).json({
-            success: false,
-            message: "Something went wrong!",
-            error: error,
-        });
-    }
-};
+const getSpecificProductUpdate = (0, catchAsync_1.default)(async (req, res) => {
+    const { productId } = req.params;
+    const bodyData = { ...req.body, ratings: [], reviews: [] };
+    const getProductUpdated = await product_service_1.productService.getSpecificProductUpdate(productId, bodyData);
+    //   send data
+    (0, sendResponse_1.default)(res, {
+        message: "Bicycle updated successfully",
+        statusCode: status_code_1.default.ok,
+        success: true,
+        data: getProductUpdated,
+    });
+});
 // get all products
-const specificProductDelete = async (req, res) => {
-    try {
-        const { productId } = req.params;
-        const productDeleted = await product_service_1.productService.specificProductDelete(productId);
-        //   send data
-        res.status(200).json({
-            message: "Bicycle deleted successfully",
-            status: true,
-            data: productDeleted.deletedCount && {},
-        });
-    }
-    catch (error) {
-        res.status(400).json({
-            success: false,
-            message: "Something went wrong!",
-            error: error,
-        });
-    }
-};
+const specificProductDelete = (0, catchAsync_1.default)(async (req, res) => {
+    const { productId } = req.params;
+    const productDeleted = await product_service_1.productService.specificProductDelete(productId);
+    (0, sendResponse_1.default)(res, {
+        message: "Bicycle deleted successfully",
+        success: true,
+        statusCode: status_code_1.default.ok,
+        data: productDeleted && {},
+    });
+});
 exports.productController = {
     productCreateDB,
     getAllProducts,

@@ -33,37 +33,52 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.paymentOrder = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const orderSchema = new mongoose_1.Schema({
-    email: {
-        type: String,
-        required: true,
-        lowercase: true,
-        trim: true,
-        validate: {
-            validator: function (value) {
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-            },
-            message: "Invalid email address format",
-        },
+const orderPaymentSchema = new mongoose_1.Schema({
+    userId: {
+        type: mongoose_1.Schema.Types.String,
+        ref: "user",
+        required: [true, "User needed"],
     },
-    product: {
-        type: mongoose_1.Schema.Types.ObjectId,
+    productId: {
+        type: mongoose_1.Schema.Types.String,
         ref: "product",
-        required: true,
+        required: [true, "User needed"],
     },
-    quantity: {
-        type: Number,
-        required: true,
-        min: 1,
+    paymentStatus: {
+        type: String,
+        enum: ["pending", "successful", "failed", 'cancel'],
+        default: "pending",
     },
-    totalPrice: {
-        type: Number,
-        required: true,
-        min: 0,
+    orderStatus: {
+        type: String,
+        enum: ["processing", "shipped", "delivered", "cancelled"],
+        default: "processing",
+    },
+    tranId: {
+        type: String,
+        default: null,
+        required: false
+    },
+    address: {
+        type: String,
+        required: [true, "Address require"],
+    },
+    paymentSystem: {
+        type: String,
+        required: [true, "PaymentSystem require"],
+        enum: ["cashOnDelivery", 'online']
+    },
+    name: {
+        type: String,
+        required: [true, "Name require"],
+    },
+    phone: {
+        type: String,
+        required: [true, "Phone require"],
     },
 }, {
     timestamps: true,
 });
-const OrderModel = mongoose_1.default.model("order", orderSchema);
-exports.default = OrderModel;
+exports.paymentOrder = mongoose_1.default.model('payment', orderPaymentSchema);

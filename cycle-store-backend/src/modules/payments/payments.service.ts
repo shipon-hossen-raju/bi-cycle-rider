@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 import SSLCommerzPayment from "sslcommerz-lts";
 import config from "../../config";
 import AppError from "../../errors/AppError";
@@ -61,28 +62,12 @@ const makePayment = async (data: TOrderPayment) => {
       config.paymentStorePassword,
       config.paymentIsLive,
     );
-    // sslcz.init(dataPayment).then((apiResponse: any) => {
-    //   // Redirect the user to payment gateway
-    //   console.log("apiResponse ", apiResponse);
-    //   let GatewayPageURL = apiResponse.GatewayPageURL;
-    //   // res.redirect(GatewayPageURL);
-    //   console.log("Redirecting to: ", GatewayPageURL);
-    //    return {
-    //      GatewayPageURL,
-    //      user,
-    //      productData,
-    //      tranId,
-    //    };
-    // });
 
     // Await the initialization of the payment
-
     const apiResponse = await sslcz.init(dataPayment);
 
     // Redirect the user to payment gateway
-    console.log("apiResponse ", apiResponse);
     let GatewayPageURL = apiResponse.GatewayPageURL;
-    console.log("Redirecting to: ", GatewayPageURL);
 
     // Return the data
     return {
@@ -148,7 +133,8 @@ const paymentCancel = async (tranId: string) => {
     { tranId },
     { paymentStatus: 1 },
   );
-  if (!paymentData) throw new AppError(statusCode.notFound, "Payment not found!");
+  if (!paymentData)
+    throw new AppError(statusCode.notFound, "Payment not found!");
 
   if (paymentData.paymentStatus === "pending") {
     const payment = await paymentOrder.findOneAndUpdate(
@@ -159,7 +145,7 @@ const paymentCancel = async (tranId: string) => {
     return payment;
   }
   throw new AppError(statusCode.badRequest, "Payment already successful");
-}
+};
 
 const orderStore = async (data: TOrderPayment) => {
   const product = new paymentOrder(data);
@@ -170,4 +156,11 @@ const findPaymentData = async (data: TOrderPayment) => {
   return await paymentOrder.findOne(data);
 };
 
-export const paymentService = { makePayment, orderStore, findPaymentData, paymentSuccess, paymentFailed, paymentCancel };
+export const paymentService = {
+  makePayment,
+  orderStore,
+  findPaymentData,
+  paymentSuccess,
+  paymentFailed,
+  paymentCancel,
+};

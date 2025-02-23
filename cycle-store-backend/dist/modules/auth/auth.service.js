@@ -10,7 +10,7 @@ const status_code_1 = __importDefault(require("../../utils/status.code"));
 const user_model_1 = require("../users/user.model");
 const auth_utils_1 = require("./auth.utils");
 const loginUser = async (payload) => {
-    const user = await user_model_1.User.findOne({ email: payload.email });
+    const user = await user_model_1.User.findOne({ email: payload.email }).select("+password");
     if (!user) {
         throw new AppError_1.default(status_code_1.default.notFound, "User not found!");
     }
@@ -25,6 +25,7 @@ const loginUser = async (payload) => {
     if (!isPWM)
         throw new AppError_1.default(status_code_1.default.forbidden, "Password do not matched!");
     const jwtPayload = {
+        _id: user._id,
         email: user.email,
         role: user.role,
     };

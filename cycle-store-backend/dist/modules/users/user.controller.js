@@ -18,6 +18,28 @@ const createUser = (0, catchAsync_1.default)(async (req, res) => {
         data: result,
     });
 });
+const findAllUsers = (0, catchAsync_1.default)(async (req, res) => {
+    const getUsers = await user_service_1.userService.getAllUsers(req.query);
+    (0, sendResponse_1.default)(res, {
+        message: "User retrieved successfully",
+        statusCode: status_code_1.default.ok,
+        success: true,
+        data: getUsers.result,
+        meta: getUsers.meta
+    });
+});
+const findUser = (0, catchAsync_1.default)(async (req, res) => {
+    const { userId } = req.params;
+    const getUser = await user_service_1.userService.getSingleUser(userId);
+    (0, sendResponse_1.default)(res, {
+        message: "User retrieved successfully",
+        statusCode: status_code_1.default.ok,
+        success: true,
+        data: getUser,
+    });
+});
 exports.userController = {
     createUser,
+    findAllUsers,
+    findUser,
 };

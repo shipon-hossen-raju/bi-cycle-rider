@@ -6,4 +6,5 @@ exports.ProductSearchableFields = [
     "brandName",
     "productTitle",
     "description",
+    "tags",
 ];

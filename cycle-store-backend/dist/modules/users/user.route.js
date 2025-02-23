@@ -11,4 +11,8 @@ const user_validation_1 = require("./user.validation");
 const router = (0, express_1.Router)();
 // user registration
 router.post("/registration", (0, validationRequest_1.default)(user_validation_1.createUserValidationSchema), user_controller_1.userController.createUser);
+// all users
+router.get("/", user_controller_1.userController.findAllUsers);
+// single user
+router.get("/:userId", user_controller_1.userController.findUser);
 exports.UserRoutes = router;
