@@ -4,7 +4,7 @@ export type TOrderPayment = {
   userId: string;
   productId: string;
   tranId: string | null;
-  paymentStatus: "pending" | "successful" | "failed";
+  paymentStatus: "pending" | "successful" | "failed" | "cancel";
   orderStatus: "processing" | "shipped" | "delivered" | "cancelled";
   paymentSystem: string;
   name: string;

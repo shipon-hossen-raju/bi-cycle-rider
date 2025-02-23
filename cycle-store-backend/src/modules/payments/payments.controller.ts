@@ -1,3 +1,4 @@
+import config from "../../config";
 import AppError from "../../errors/AppError";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
@@ -7,18 +8,16 @@ import { paymentService } from "./payments.service";
 
 const productOder = catchAsync(async (req, res) => {
   const bodyData = req.body;
-  console.log("req.body => ", req.body);
 
   let payment: any;
   if (bodyData.paymentSystem === "online") {
     payment = await paymentService.makePayment(bodyData);
 
+
     if (!payment) {
       throw new AppError(statusCode.badGateway, "Payment Failed!");
     }
   }
-
-  console.log("payment 21 ", payment);
 
   let orderStoreData: TOrderPayment = {
     paymentStatus: "pending",
@@ -32,52 +31,65 @@ const productOder = catchAsync(async (req, res) => {
     phone: bodyData.phone,
   };
 
-  console.log(" orderStoreData ", orderStoreData);
-
   const orderStore = await paymentService.orderStore(orderStoreData);
-
-  console.log("orderStored ", orderStore);
 
   if (!orderStore)
     throw new AppError(statusCode.badGateway, "payment store failed");
 
-  // console.log("payment controller : ", payment);
 
   sendResponse(res, {
     success: true,
     statusCode: statusCode.created,
     message: "Order completed",
-    data: orderStore,
+    data: { ...orderStore?._doc, gatewayPageURL: payment.GatewayPageURL },
   });
 });
 
 const paymentSuccess = catchAsync(async (req, res) => {
   const { tranId } = req.params;
-  console.log("payment success ", tranId);
-
+  
   if (tranId) {
-    // const paymentDetails = await paymentService.findPaymentData({ tranId });
-    // console.log(" payment success paymentDetails ", paymentDetails);
+    const paymentDetails = await paymentService.paymentSuccess(
+      tranId as string,
+    );
+    if (!paymentDetails)
+      throw new AppError(statusCode.badGateway, "Payment not found!");
+
+    // redirect to success page
+    res.redirect(`${config.frontendUrl}/payment/success/${tranId}`);
+  } else {
+    throw new AppError(statusCode.badRequest, "TranId required");
   }
 });
 
 const paymentFailed = catchAsync(async (req, res) => {
   const { tranId } = req.params;
-  console.log("payment success ", tranId);
 
   if (tranId) {
-    // const paymentDetails = await paymentService.findPaymentData({ tranId });
-    // console.log("Failed paymentDetails ", paymentDetails);
+    const paymentDetails = await paymentService.paymentFailed(tranId as string);
+
+    if (!paymentDetails)
+      throw new AppError(statusCode.badGateway, "Payment not found!");
+
+    // redirect to failed page
+    res.redirect(`${config.frontendUrl}/payment/failed/${tranId}`);
+  } else {
+    throw new AppError(statusCode.badRequest, "TranId required");
   }
 });
 
 const paymentCancel = catchAsync(async (req, res) => {
   const { tranId } = req.params;
-  console.log("payment success ", tranId);
 
   if (tranId) {
-    // const paymentDetails = await paymentService.findPaymentData({ tranId });
-    // console.log("Cancel paymentDetails ", paymentDetails);
+    const paymentDetails = await paymentService.paymentCancel(tranId as string);
+    if (!paymentDetails)
+      throw new AppError(statusCode.badGateway, "Payment not found!");
+
+    // redirect to cancel page
+    res.redirect(`${config.frontendUrl}/payment/cancel/${tranId}`);
+  } else {
+    throw new AppError(statusCode.badRequest, "TranId required");
   }
 });
 

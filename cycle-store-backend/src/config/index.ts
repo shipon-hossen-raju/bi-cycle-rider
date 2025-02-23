@@ -23,4 +23,5 @@ export default {
   paymentIsLive: process.env.IS_LIVE || false,
   paymentRedirectUrl:
     process.env.PAYMENT_REDIRECT_URL || "http://localhost:5000/api/v1/payments",
+  frontendUrl: process.env.FRONTEND_URL || "http://localhost:5173",
 };
