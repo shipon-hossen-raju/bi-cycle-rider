@@ -5,9 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
+const nodeEnv = process.env.NODE_ENV || "development";
 exports.default = {
     port: process.env.PORT,
-    node_env: process.env.NODE_ENV,
+    node_env: nodeEnv,
     db_url: process.env.DB_URL,
     bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
     jwt_access_secret: process.env.JWT_ACCESS_SECRET,
@@ -23,6 +24,10 @@ exports.default = {
     paymentStoreId: process.env.STORE_ID || "bicyc67af5cf798849",
     paymentStorePassword: process.env.STORE_PASSWORD || "bicyc67af5cf798849@ssl",
     paymentIsLive: process.env.IS_LIVE || false,
-    paymentRedirectUrl: process.env.PAYMENT_REDIRECT_URL || "http://localhost:5000/api/v1/payments",
-    frontendUrl: process.env.FRONTEND_URL || "http://localhost:5173",
+    paymentRedirectUrl: nodeEnv === "production"
+        ? process.env.PAYMENT_REDIRECT_URL
+        : process.env.PAYMENT_REDIRECT_URL_PORD,
+    frontendUrl: nodeEnv === "production"
+        ? process.env.FRONTEND_URL_PORD
+        : process.env.FRONTEND_URL,
 };
