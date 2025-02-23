@@ -85,6 +85,11 @@ export default function ProductOrder({
 
       console.log("orderResult ", orderResult);
 
+      if (orderResult?.data?.gatewayPageURL) {
+        console.log("orderResult?.gatewayPageURL ", orderResult?.gatewayPageURL);
+        window.location.href = orderResult?.data?.gatewayPageURL;
+    }
+
       toast.success( "Order Successful", { id: toastId });
       setIsOpenModal(false);
       // navigate("/order-success");

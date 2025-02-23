@@ -16,6 +16,7 @@ import ProductDetails from "@/pages/Shop/ProductDetails";
 import Users from "@/pages/dashboard/Users/Users";
 import { usersIcon } from "@/assets/icons/globalIcon";
 import UserDetails from "@/pages/dashboard/Users/UserDetails";
+import PaymentStatus from "@/pages/PaymentStatus/PaymentStatus";
 
 export const navItems: TNavItems[] = [
   {
@@ -51,6 +52,11 @@ export const navItems: TNavItems[] = [
     id: "5-account",
     path: "/account",
     element: <Account />,
+  },
+  {
+    id: "5-paymentStatus",
+    path: "/payment/:paymentStatus/:orderId",
+    element: <PaymentStatus />,
   },
 ];
 
