@@ -9,15 +9,16 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: ["http://localhost:5173"], credentials: true }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://bi-cycle-rider.vercel.app"],
+    credentials: true,
+  }),
+);
 
 app.use("/api/v1", appRouter);
-
-// product routes
-// app.use("/api/products", productRoute);
-
-// orders routes
-// app.use("/api/orders", orderRoute);
 
 // default route or root route
 app.get("/", (req: Request, res: Response) => {
