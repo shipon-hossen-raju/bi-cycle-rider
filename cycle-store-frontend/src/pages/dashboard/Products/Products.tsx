@@ -56,7 +56,7 @@ export default function Products() {
           <AddProduct setIsProduct={setIsProduct} />
         ) : isProduct === productsTabIndex.update ? (
           <UpdateProduct
-            productData={productData}
+            productData={productData as TProduct}
             setIsProduct={setIsProduct}
           />
         ) : null}

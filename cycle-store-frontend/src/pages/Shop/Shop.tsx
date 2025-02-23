@@ -9,10 +9,11 @@ import { TProduct } from "@/types";
 import shortParagraph from "@/utils/shortParagraph";
 import { useState } from "react";
 import { Link } from "react-router";
+import { SkewLoader } from "react-spinners";
 
 export default function Shop() {
   const [page, setPage] = useState(1);
-  const { data, isFetching, isLoading } = useGetAllProductsQuery([
+  const { data, isLoading } = useGetAllProductsQuery([
     {
       name: "page",
       value: page,
@@ -21,8 +22,13 @@ export default function Shop() {
   const productsData = data?.data;
   const productMeta = data?.meta;
 
-  console.log("productsData ", productsData);
-  console.log("productMeta ", productMeta);
+  if (isLoading) {
+    return (
+      <div className="py-10 px-6 flex items-center justify-center">
+        <SkewLoader />
+      </div>
+    );
+  }
 
   return (
     <section>
@@ -143,11 +149,11 @@ function ProductCard({ product }: { product: TProduct }) {
   );
 }
 
-function FeatureItem({ title, name }: { title: string; name: string }) {
-  return (
-    <p className="text-TextGray text-sm">
-      <span className="font-medium text-primary">{title}</span>:{" "}
-      <span className="text-primary/85 font-normal">{name}</span>
-    </p>
-  );
-}
+// function FeatureItem({ title, name }: { title: string; name: string }) {
+//   return (
+//     <p className="text-TextGray text-sm">
+//       <span className="font-medium text-primary">{title}</span>:{" "}
+//       <span className="text-primary/85 font-normal">{name}</span>
+//     </p>
+//   );
+// }

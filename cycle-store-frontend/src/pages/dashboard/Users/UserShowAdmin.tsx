@@ -10,27 +10,20 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { TTokenUser } from "@/redux/features/auth/authSlice";
 import { useGetAllUsersQuery } from "@/redux/features/users/usersApi";
-import { TProduct } from "@/types";
+import { TUser } from "@/types/users.types";
 import { Eye, Pencil, Trash } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router";
 import { SkewLoader } from "react-spinners";
 import { toast } from "sonner";
 import { productsTabIndex } from "./ProductsConstant";
-import { TUser } from "@/types/users.types";
-import { Link } from "react-router";
 
 type TUsersShow = {
   setIsProduct: (value: string) => void;
-  setProductData: (value: TProduct) => void;
 };
 
-export default function UserShowAdmin({
-  setIsProduct,
-  setProductData,
-}: TUsersShow) {
-  // const [deleteProducts] = useDeleteProductsMutation(undefined);
+export default function UserShowAdmin({ setIsProduct }: TUsersShow) {
   const [page, setPage] = useState(1);
   const {
     data: usersData,
@@ -48,8 +41,8 @@ export default function UserShowAdmin({
   const handleDelete = async (id: string) => {
     const toastId = toast.loading("Product deleting");
     try {
+      console.log("id :>> ", id);
       // await deleteProducts(id).unwrap();
-
       toast.success("Product Deleted success", { id: toastId });
     } catch (err: any) {
       toast.error(`${err?.data?.message}`, { id: toastId });
@@ -65,6 +58,7 @@ export default function UserShowAdmin({
   }
 
   const handleUpdate = (data: TUser) => {
+    console.log("data", data);
     setIsProduct(productsTabIndex.update as string);
     // setProductData(data);
   };
