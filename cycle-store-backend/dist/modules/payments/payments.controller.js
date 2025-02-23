@@ -34,11 +34,13 @@ const productOder = (0, catchAsync_1.default)(async (req, res) => {
     if (!orderStore)
         throw new AppError_1.default(status_code_1.default.badGateway, "payment store failed");
     const orderStoreDoc = orderStore?._doc;
+    const fData = { ...orderStoreDoc, gatewayPageURL: payment.GatewayPageURL };
+    console.log(" fData ", fData);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: status_code_1.default.created,
         message: "Order completed",
-        data: { ...orderStoreDoc, gatewayPageURL: payment.GatewayPageURL },
+        data: fData,
     });
 });
 const paymentSuccess = (0, catchAsync_1.default)(async (req, res) => {

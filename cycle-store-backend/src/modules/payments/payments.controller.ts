@@ -13,7 +13,6 @@ const productOder = catchAsync(async (req, res) => {
   if (bodyData.paymentSystem === "online") {
     payment = await paymentService.makePayment(bodyData);
 
-
     if (!payment) {
       throw new AppError(statusCode.badGateway, "Payment Failed!");
     }
@@ -37,18 +36,21 @@ const productOder = catchAsync(async (req, res) => {
     throw new AppError(statusCode.badGateway, "payment store failed");
 
   const orderStoreDoc = (orderStore as any)?._doc;
+  const fData = { ...orderStoreDoc, gatewayPageURL: payment.GatewayPageURL };
+
+console.log(" fData ", fData);
 
   sendResponse(res, {
     success: true,
     statusCode: statusCode.created,
     message: "Order completed",
-    data: { ...orderStoreDoc, gatewayPageURL: payment.GatewayPageURL },
+    data: fData,
   });
 });
 
 const paymentSuccess = catchAsync(async (req, res) => {
   const { tranId } = req.params;
-  
+
   if (tranId) {
     const paymentDetails = await paymentService.paymentSuccess(
       tranId as string,

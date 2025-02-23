@@ -11,6 +11,12 @@ import { TOrderPayment } from "./payment.type";
 // single product payment
 const makePayment = async (data: TOrderPayment) => {
   const { userId, productId } = data;
+  // const psId = config.paymentStoreId;
+  const psId = process.env.STORE_ID;
+  // const psPw = config.paymentStorePassword;
+  const psPw = process.env.STORE_PASSWORD;
+  // const psST = config.paymentIsLive;
+  const psST = process.env.IS_LIVE;
 
   // find user details find by userId
   const user = await userService.getSingleUser(userId);
@@ -57,14 +63,20 @@ const makePayment = async (data: TOrderPayment) => {
   };
 
   try {
+    console.log("psId ", psId, ", psPw ", psPw, ", psST ", psST);
     const sslcz = new SSLCommerzPayment(
-      config.paymentStoreId,
-      config.paymentStorePassword,
-      config.paymentIsLive,
+      // process.env.STORE_ID,
+      "bicyc67af5cf798849",
+      // process.env.STORE_PASSWORD,
+      "bicyc67af5cf798849@ssl",
+      // process.env.IS_LIVE,
+      false
     );
 
     // Await the initialization of the payment
     const apiResponse = await sslcz.init(dataPayment);
+
+    console.log("apiResponse", apiResponse);
 
     // Redirect the user to payment gateway
     let GatewayPageURL = apiResponse.GatewayPageURL;
