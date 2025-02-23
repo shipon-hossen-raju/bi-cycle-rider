@@ -17,6 +17,7 @@ import Users from "@/pages/dashboard/Users/Users";
 import { usersIcon } from "@/assets/icons/globalIcon";
 import UserDetails from "@/pages/dashboard/Users/UserDetails";
 import PaymentStatus from "@/pages/PaymentStatus/PaymentStatus";
+import NotFoundPage from "@/pages/NotFound/NotFound";
 
 export const navItems: TNavItems[] = [
   {
@@ -57,6 +58,11 @@ export const navItems: TNavItems[] = [
     id: "5-paymentStatus",
     path: "/payment/:paymentStatus/:orderId",
     element: <PaymentStatus />,
+  },
+  {
+    id: "5-not-found",
+    path: "*",
+    element: <NotFoundPage />,
   },
 ];
 
