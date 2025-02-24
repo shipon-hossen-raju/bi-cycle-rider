@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.paymentService = void 0;
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const sslcommerz_lts_1 = __importDefault(require("sslcommerz-lts"));
-const config_1 = __importDefault(require("../../config"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const status_code_1 = __importDefault(require("../../utils/status.code"));
 const product_service_1 = require("../product/product.service");
@@ -36,10 +35,14 @@ const makePayment = async (data) => {
         total_amount: totalAmount,
         currency: "BDT",
         tran_id: tranId, // use unique tran_id for each api call
-        success_url: `${config_1.default.paymentRedirectUrl}/success/${tranId}`,
-        fail_url: `${config_1.default.paymentRedirectUrl}/fail/${tranId}`,
-        cancel_url: `${config_1.default.paymentRedirectUrl}/cancel/${tranId}`,
-        ipn_url: `${config_1.default.paymentRedirectUrl}/ipn/${tranId}`,
+        // success_url: `${config.paymentRedirectUrl}/success/${tranId}`,
+        // fail_url: `${config.paymentRedirectUrl}/fail/${tranId}`,
+        // cancel_url: `${config.paymentRedirectUrl}/cancel/${tranId}`,
+        // ipn_url: `${config.paymentRedirectUrl}/ipn/${tranId}`,
+        success_url: `https://bi-cycle-rider-backend.vercel.app/api/v1/payments/success/${tranId}`,
+        fail_url: `https://bi-cycle-rider-backend.vercel.app/api/v1/payments/fail/${tranId}`,
+        cancel_url: `https://bi-cycle-rider-backend.vercel.app/api/v1/payments/cancel/${tranId}`,
+        ipn_url: `https://bi-cycle-rider-backend.vercel.app/api/v1/payments/ipn/${tranId}`,
         shipping_method: "Courier",
         product_name: "Computer.",
         product_category: "Electronic",
